@@ -1,0 +1,48 @@
+// General
+"app_name" = "宜大學生app";
+"back" = "返回";
+"loading" = "加載中...";
+// LoginView
+"school_num" = "學號(無需＠ms...)";
+"pwd" = "密碼";
+"btn_login" = "登入";
+"logining" = "登入中...";
+"login_success" = "登入成功！";
+"login_failed_title" = "登入失敗";
+"login_failed_message" = "帳號或密碼錯誤！！";
+"Dialog_Error_Title" = "錯誤！";
+"Dialog_Error_EmptyField" = "帳號或密碼不得為空！！";
+"Dialog_Cancel" = "取消";
+"Dialog_OK" = "OK";
+// HomeView
+  // 主畫面 功能
+"EUNI" = "M園區";
+"Score_Inquiry" = "成績查詢";
+"Class_Schedule" = "我的課表";
+"Event_Registration" = "活動報名";
+"Contact_Us" = "聯絡我們";
+"Graduation_Threshold" = "畢業門檻";
+"Subject_System" = "選課系統";
+"Bus" = "公車動態";
+"Zuvio" = "ZUVIO";
+"Take_Leave" = "請假系統";
+"Mail" = "校園信箱";
+  // 主畫面 Drawer
+"HomePage" = "首頁";
+"Announcement" = "公告";
+"Calendar" = "行事曆";
+"Questionnaire" = "問卷";
+"Satisfaction_Survey" = "滿意度調查";
+"Satisfaction_Survey_Text" = "您好:\n\n&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;這是一份宜大學生app滿意度調查問卷，請您仔細閱讀，並在適當的答案中勾選，本問卷僅提供app內部開發使用，您所填答的資料絕對不會對外公開，請您放心作答，您的寶貴意見有助於我們改善app品質，感謝您的參與。\n";
+"Start_Satisfaction_Survey" = "開始填寫";
+"Achievements" = "成就";
+"huh" = "說明";
+"About" = "關於";
+"Settings" = "設定";
+"Theme" = "主題：  ";
+"bright" = "亮色主題";
+"dark" = "深色主題";
+"default" = "跟隨系統";
+"delete_user_data" = "刪除使用者資料";
+
+"Logout" = "登出";

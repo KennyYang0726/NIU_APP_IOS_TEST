@@ -1,0 +1,48 @@
+// General
+"app_name" = "NIU app";
+"back" = "Back";
+"loading" = "Loading...";
+// LoginView
+"school_num" = "Student number";
+"pwd" = "password";
+"btn_login" = "Login";
+"logining" = "login...";
+"login_success" = "Login successfully";
+"login_failed_title" = "Login failed";
+"login_failed_message" = "Wrong account or password";
+"Dialog_Error_Title" = "Error!";
+"Dialog_Error_EmptyField" = "Field can not be empty";
+"Dialog_Cancel" = "Cancel";
+"Dialog_OK" = "OK";
+// HomeView
+  // 主畫面 功能
+"EUNI" = "EUNI";
+"Score_Inquiry" = "Score Inquiry";
+"Class_Schedule" = "Class Schedule";
+"Event_Registration" = "Event Registration";
+"Contact_Us" = "Contact Us";
+"Graduation_Threshold" = "Graduation Threshold";
+"Subject_System" = "Subject System";
+"Bus" = "Bus Trend";
+"Zuvio" = "ZUVIO";
+"Take_Leave" = "Take Leave";
+"Mail" = "NIU Mail";
+  // 主畫面 Drawer
+"HomePage" = "Home";
+"Announcement" = "Announcement";
+"Calendar" = "Calendar";
+"Questionnaire" = "Questionnaire";
+"Satisfaction_Survey" = "Satisfaction Survey";
+"Satisfaction_Survey_Text" = "Hello:\n\n&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;This is a questionnaire satisfaction of this app. Please read it carefully and check the appropriate answers. This questionnaire is only for internal development and use of the app. The information you answer will never be public, please rest assured. Your valuable opinions will help us improve the quality of the app, thank you for your participation.\n";
+"Start_Satisfaction_Survey" = "Start";
+"Achievements" = "Achievements";
+"huh" = "Synopsis";
+"About" = "About";
+"Settings" = "Settings";
+"Theme" = "Theme:  ";
+"bright" = "Bright Theme";
+"dark" = "Dark Theme";
+"default" = "Follow System";
+"delete_user_data" = "delete user data";
+
+"Logout" = "登出";
