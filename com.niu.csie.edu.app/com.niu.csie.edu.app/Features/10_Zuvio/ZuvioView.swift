@@ -42,6 +42,7 @@ struct ZuvioView: View {
                 WebViewContainer(webView: WebZuvio.webView)
                     .opacity(WebZuvio.isVisible ? 1 : 0)
                     .animation(.easeInOut(duration: 0.2), value: WebZuvio.isVisible)
+                    .ignoresSafeArea(edges: .bottom)
 
                 ProgressOverlay(isVisible: $showOverlay, text: overlayText)
             }

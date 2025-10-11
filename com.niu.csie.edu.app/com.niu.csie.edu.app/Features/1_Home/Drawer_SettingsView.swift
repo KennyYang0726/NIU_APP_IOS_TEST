@@ -57,7 +57,7 @@ struct Drawer_SettingsView: View {
             )
             .padding(.horizontal, isPad ? 211 : 97)
             .foregroundColor(.white)
-            .padding(.vertical, isPad ? -401 : -257)
+            .padding(.vertical, isPad ? -899 : -499)
         }
     }
 }

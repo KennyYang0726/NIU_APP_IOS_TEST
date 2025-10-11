@@ -58,11 +58,12 @@ struct WebQuestionnairePage: View {
     )
 
     var body: some View {
-        WebViewContainer(webView: webProvider.webView)
+        WebViewContainer(webView: webProvider.webView).ignoresSafeArea(edges: .bottom)
         .navigationTitle(LocalizedStringKey("Satisfaction_Survey"))
         .toolbarBackground(.visible, for: .navigationBar) // 強制背景顯示
         .toolbarBackground(Color.accentColor, for: .navigationBar)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbarColorScheme(.dark, for: .navigationBar)
     }
 }
 

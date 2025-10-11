@@ -8,9 +8,12 @@ enum AppTheme: String, CaseIterable {
     case dark
 }
 
+// 儲存帳密的部分在 Features/0_Login/LoginRepository.swift
 class AppSettings: ObservableObject {
     
-    // private let loginPrefs = UserDefaults(suiteName: "LoginPrefs")!
+    // 儲存 學年度 名字
+    private let infoPrefs = UserDefaults(suiteName: "Infos")!
+    // 儲存 使用者選擇的 主題色
     private let themePrefs = UserDefaults(suiteName: "AppThemePrefs")!
     
     @Published var theme: AppTheme {

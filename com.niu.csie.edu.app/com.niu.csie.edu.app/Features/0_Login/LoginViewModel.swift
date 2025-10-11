@@ -2,102 +2,198 @@ import Foundation
 import SwiftUI
 import Combine
 
-
 /// MVVM: 負責「狀態」與「業務邏輯」
 
-// 由於 alert 在 view 只能實例1次，使用 case 區別
+// MARK: - Alert 狀態枚舉
 enum LoginAlert: Identifiable {
+    // 基本登入
     case emptyFields
     case loginFailed
-    var id: Int { hashValue }
+
+    // === SSO 專用 ===
+    case ssoCredentialsFailed(message: String)          // 帳密錯誤
+    case ssoPasswordExpiring(message: String)           // 密碼即將到期（SweetAlert）
+    case ssoPasswordExpired(message: String)            // 密碼已到期（SweetAlert）
+    case ssoAccountLocked(lockTime: String?)            // 帳號鎖定
+    case ssoSystemError                                 // error.html
+    case ssoGeneric(title: String, message: String)     // 其他通用訊息
+
+    var id: String {
+        switch self {
+        case .emptyFields: return "emptyFields"
+        case .loginFailed: return "loginFailed"
+        case .ssoCredentialsFailed(let m): return "ssoCredentialsFailed:\(m)"
+        case .ssoPasswordExpiring(let m): return "ssoPasswordExpiring:\(m)"
+        case .ssoPasswordExpired(let m): return "ssoPasswordExpired:\(m)"
+        case .ssoAccountLocked(let t): return "ssoAccountLocked:\(t ?? "")"
+        case .ssoSystemError: return "ssoSystemError"
+        case .ssoGeneric(let t, let m): return "ssoGeneric:\(t)|\(m)"
+        }
+    }
 }
 
+// MARK: - ViewModel 主體
 final class LoginViewModel: ObservableObject {
-    
+
     private let repository = LoginRepository()
-    
+
     // MARK: - 使用者輸入 & UI 狀態
-    @Published var account: String = ""          // 帳號
-    @Published var password: String = ""         // 密碼
+    @Published var account: String = ""
+    @Published var password: String = ""
     @Published var isPasswordVisible: Bool = false
-    
-    // 告訴 view 此時的 alert case
+
+    // MARK: - Alert 狀態
     @Published var LoginActiveAlert: LoginAlert?
-    
-    @Published var showSuccessToast = false      // 登入成功提示
-    @Published var startLoginProcess = false     // 開始登入流程
-    
-    // 登入狀態
+
+    // MARK: - 登入狀態與流程
+    @Published var startZuvioLoginProcess = false
+    @Published var startSSOLoginProcess = false
+
     @Published var zuvioLoginSuccess = false
     @Published var ssoLoginSuccess = false
     @Published var loginFinished = false
-    
-    // prog
+
+    // progress overlay
     @Published var showOverlay: Bool = false
     @Published var overlayText: LocalizedStringKey = "logining"
-    
+
+    // SweetAlert 關閉後續（由 WebView 帶回）
+    var resumeSSOAfterClosingSweetAlert: (() -> Void)?
+
+    init() {
+        // 預設行為：稍後再說 → 0.5 秒後重新開始 SSO 登入流程
+        self.resumeSSOAfterClosingSweetAlert = { [weak self] in
+            guard let self = self else { return }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.startSSOLoginProcess = true
+            }
+        }
+    }
+
     // MARK: - 衍生屬性
-    /// 轉換輸入帳號成 Zuvio 登入帳號
     var zuvioLoginEmail: String {
         let idPart = account.split(separator: "@").first ?? ""
         return "\(idPart)@ms.niu.edu.tw"
     }
 
-    /// 轉換輸入帳號成 SSO 登入帳號
     var loginAccount: String {
         return account.split(separator: "@").first.map(String.init) ?? ""
     }
-    
-    // MARK: - 動作事件（由 View 呼叫）
+
+    // MARK: - 動作事件
     func onTapLogin() {
         guard !account.isEmpty, !password.isEmpty else {
             LoginActiveAlert = .emptyFields
             return
         }
-        // 顯示 prog
         showOverlay = true
-        // 重置狀態，避免殘留影響這次流程
-        showSuccessToast = false
         zuvioLoginSuccess = false
+        ssoLoginSuccess = false
         loginFinished = false
-        startLoginProcess = true
+        startZuvioLoginProcess = true
+        startSSOLoginProcess = true
     }
-    
+
     func autoLogin() {
         if let saved = repository.loadCredentials() {
             account = saved.username
             password = saved.password
-            // 顯示 prog
             showOverlay = true
-            // 重置狀態，避免殘留影響這次流程
-            showSuccessToast = false
             zuvioLoginSuccess = false
+            ssoLoginSuccess = false
             loginFinished = false
-            startLoginProcess = true
+            startZuvioLoginProcess = true
+            startSSOLoginProcess = true
         }
     }
-    
-    func handleLoginResult(_ success: Bool) {
-        // 統一收斂成功/失敗結果
-        startLoginProcess = false
-        loginFinished = true
+
+    func handleZuvioLoginResult(_ success: Bool) {
+        startZuvioLoginProcess = false
         zuvioLoginSuccess = success
-        // 隱藏 prog
-        showOverlay = false
-        if success {
-            // 紀錄帳密
-            repository.saveCredentials(username: account, password: password)
-            // 通知改變結果
-            showSuccessToast = true
-        } else {
-            // 刪除帳密
-            repository.clearCredentials()
-            // 通知改變結果
-            LoginActiveAlert = .loginFailed
+        checkLoginResult()
+    }
+
+    func handleSSOLoginResult(_ result: SSOLoginResult) {
+        startSSOLoginProcess = false
+        
+        switch result {
+        case .success:
+            ssoLoginSuccess = true
+            checkLoginResult()
+        case .credentialsFailed(let message):
+            ssoLoginSuccess = false
+            LoginActiveAlert = .ssoCredentialsFailed(message: message)
+            checkLoginResult()
+        case .passwordExpiring(let message):
+            ssoLoginSuccess = false
+            LoginActiveAlert = .ssoPasswordExpiring(message: message)
+            checkLoginResult()
+        case .passwordExpired(let message):
+            ssoLoginSuccess = false
+            LoginActiveAlert = .ssoPasswordExpired(message: message)
+            checkLoginResult()
+        case .accountLocked(let lockTime):
+            ssoLoginSuccess = false
+            LoginActiveAlert = .ssoAccountLocked(lockTime: lockTime)
+            checkLoginResult()
+        case .systemError:
+            ssoLoginSuccess = false
+            LoginActiveAlert = .ssoSystemError
+            checkLoginResult()
+        case .generic(let title, let message):
+            ssoLoginSuccess = false
+            LoginActiveAlert = .ssoGeneric(title: title, message: message)
+            checkLoginResult()
+        case .captchaError:
+            // 驗證碼錯誤，重新開始登入流程
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                self.startSSOLoginProcess = true
+            }
         }
     }
-    
+
+    private func checkLoginResult() {
+        // 當兩邊都完成才收斂
+        guard !startZuvioLoginProcess, !startSSOLoginProcess else { return }
+
+        showOverlay = false
+        loginFinished = true
+
+        if zuvioLoginSuccess && ssoLoginSuccess {
+            // 記錄帳密
+            repository.saveCredentials(username: account, password: password)
+        } else {
+            // 清除帳密記錄
+            repository.clearCredentials()
+            // 只有在沒有其他 Alert 顯示時才顯示登入失敗
+            // (不會觸發，因為SSO帳密錯誤或到期必定跳Dialog，以 sso dialog 為主)
+            /*
+            if LoginActiveAlert == nil {
+                LoginActiveAlert = .loginFailed
+            }*/
+        }
+    }
+
     func togglePasswordVisible() {
         isPasswordVisible.toggle()
     }
+
+    // MARK: - 開啟修改密碼頁
+    func openSSOPasswordChange() {
+        guard let url = URL(string: "https://ccsys.niu.edu.tw/SSO/Teac_Secret.aspx") else { return }
+        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        startSSOLoginProcess = false
+        /*
+        // 延遲一點點後結束 App（避免使用者還沒切出去就被關掉）
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.terminateApp()
+        }*/
+    }
+    /*
+    private func terminateApp() {
+        // ⚠️ Apple 不建議直接關閉 App，但技術上可以這樣做：
+        // apple 人工審查階段可能被拒
+        exit(0)
+    }*/
 }
+

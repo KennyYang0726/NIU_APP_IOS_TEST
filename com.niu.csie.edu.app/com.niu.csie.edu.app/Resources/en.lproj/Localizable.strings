@@ -12,6 +12,14 @@
 "login_failed_message" = "Wrong account or password";
 "Dialog_Error_Title" = "Error!";
 "Dialog_Error_EmptyField" = "Field can not be empty";
+"Dialog_SystemError_Title" = "System Error!";
+"Dialog_SystemError_Message" = "Unknown error occurred, please try again later.";
+"Dialog_PWD_almost_expired_Title" = "Password almost expire!";
+"Dialog_PWD_expired_Title" = "Password Expired!";
+"Dialog_ChangePWD" = "Go Change";
+"Dialog_ChangePWDLater" = "Later";
+"Dialog_AccountLocked_Title" = "Account Locked!";
+"Dialog_AccountLocked_Default_Message" = "\nFor Security\nYou can't login in 15 min";
 "Dialog_Cancel" = "Cancel";
 "Dialog_OK" = "OK";
 // HomeView

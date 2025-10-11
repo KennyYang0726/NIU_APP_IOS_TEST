@@ -1,7 +1,7 @@
 <img style="width:64px" src="https://user-images.githubusercontent.com/13403218/228755470-34ae31ec-eb1a-4c1c-9461-bdbaa04d9fef.png" />
 
 # NIU App (iOS)
-> Swift / SwiftUI version — Application for National Ilan University
+> SwiftUI project — Application for National Ilan University
 
 這是一個給宜大學生使用的 iOS APP，整合了大部分常使用到的功能，包含數位學習 M 園區、分數查詢、課表、活動報名、畢業門檻查詢、選課、請假，並提供公車動態查詢與 Zuvio。
 
@@ -22,29 +22,9 @@
    ```bash
    git clone https://github.com/KennyYang0726/NIU_APP_IOS.git
    ```
-3. 進入專案資料夾後，開啟：
-   - `NIU_APP.xcodeproj` 或  
-   - `NIU_APP.xcworkspace`  
+3. 進入專案資料夾後，開啟：`NIU_APP.xcodeproj`
 4. **Xcode 會自動根據 `Package.resolved` 下載並安裝所有依賴項目。**
 
----
-
-### CocoaPods
-本專案部分模組透過 **CocoaPods** 管理（例如 Firebase、Google MLKit 等）。
-
-若 Xcode 未自動載入依賴，請手動執行以下步驟：
-
-1. 安裝 CocoaPods（若尚未安裝）：
-   ```bash
-   sudo gem install cocoapods
-   ```
-2. 在專案目錄中初始化與安裝 Pods：
-   ```bash
-   pod install
-   ```
-3. 安裝完成後，請使用 `.xcworkspace` 開啟專案。
-
-> ✅ 建議始終以 `.xcworkspace` 方式開啟，以確保 CocoaPods 依賴正常載入。
 
 ### iOS IPA
 - [Release 下載連結](https://github.com/KennyYang0726/NIU_APP_IOS/releases/tag/iOS)  

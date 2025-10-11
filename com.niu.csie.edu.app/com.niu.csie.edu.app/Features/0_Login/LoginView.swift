@@ -1,5 +1,6 @@
 import SwiftUI
 
+
 /// 負責 UI 呈現，邏輯交由 ViewModel 控制
 struct LoginView: View {
     @StateObject private var vm = LoginViewModel()
@@ -10,120 +11,139 @@ struct LoginView: View {
     var body: some View {
         let metrics = LayoutMetrics.metrics(for: hSizeClass ?? .compact)
         
+        /*
         ZStack {
-            VStack(spacing: metrics.mainSpacing) {
+            // 登入中 prog (注意！放在這裡才是全版面)
+            ProgressOverlay(isVisible: $vm.showOverlay, text: vm.overlayText)
+        }*/
+        
+        VStack(spacing: metrics.mainSpacing) {
+            
+            // Logo
+            Image("niu_logo")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .padding(.horizontal, metrics.logoHorizontalPadding)
+            
+            // App 名稱
+            Text(LocalizedStringKey("app_name"))
+                .font(.system(size: metrics.titleFont))
+                .scaledToFit()
+                .foregroundColor(Color("Title"))
+            
+            // 表單區塊
+            VStack(spacing: metrics.innerSpacing) {
                 
-                // Logo
-                Image("niu_logo")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .padding(.horizontal, metrics.logoHorizontalPadding)
-                
-                // App 名稱
-                Text(LocalizedStringKey("app_name"))
-                    .font(.system(size: metrics.titleFont))
-                    .scaledToFit()
-                    .foregroundColor(Color("Title"))
-                
-                // 表單區塊
-                VStack(spacing: metrics.innerSpacing) {
+                // 帳號輸入
+                HStack {
+                    SFIcon(name: "person.fill",
+                           width: metrics.innerIconWidth,
+                           height: metrics.innerIconHeight)
                     
-                    // 帳號輸入
-                    HStack {
-                        SFIcon(name: "person.fill",
-                               width: metrics.innerIconWidth,
-                               height: metrics.innerIconHeight)
-                        
-                        TextField("",
-                                  text: $vm.account,
-                                  prompt: Text(LocalizedStringKey("school_num"))
-                                    .foregroundColor(.gray))
-                            .textInputAutocapitalization(.never)
-                            .disableAutocorrection(true)
-                            .keyboardType(.emailAddress)
-                            .textContentType(.username)
-                            .frame(height: metrics.textFieldHeight)
-                            .font(.system(size: metrics.textFieldHeight - metrics.innerIconWidth))
-                            .padding(.leading, metrics.innerPaddingLeft)
-                            .foregroundColor(.black)
-                    }
-                    .modifier(InputFieldModifier(height: metrics.textFieldHeight,
-                                                 sidePadding: metrics.innerSpacing))
-                    
-                    // 密碼輸入
-                    HStack {
-                        SFIcon(name: "key.fill",
-                               width: metrics.innerIconWidth,
-                               height: metrics.innerIconHeight)
-                        
-                        ZStack {
-                            if vm.isPasswordVisible {
-                                TextField("",
-                                          text: $vm.password,
-                                          prompt: Text(LocalizedStringKey("pwd"))
-                                            .foregroundColor(.gray))
-                            } else {
-                                SecureField("",
-                                            text: $vm.password,
-                                            prompt: Text(LocalizedStringKey("pwd"))
-                                              .foregroundColor(.gray))
-                            }
-                        }
-                        .textContentType(.password)
+                    TextField("",
+                              text: $vm.account,
+                              prompt: Text(LocalizedStringKey("school_num"))
+                                .foregroundColor(.gray))
+                        .textInputAutocapitalization(.never)
+                        .disableAutocorrection(true)
+                        .keyboardType(.emailAddress)
+                        .textContentType(.username)
                         .frame(height: metrics.textFieldHeight)
                         .font(.system(size: metrics.textFieldHeight - metrics.innerIconWidth))
                         .padding(.leading, metrics.innerPaddingLeft)
                         .foregroundColor(.black)
-                        
-                        // 顯示/隱藏密碼
-                        SFIcon(name: vm.isPasswordVisible ? "eye.fill" : "eye.slash.fill",
-                               width: metrics.innerIconWidth * 1.5,
-                               height: metrics.innerIconHeight)
-                            .onTapGesture { vm.togglePasswordVisible() }
-                    }
-                    .modifier(InputFieldModifier(height: metrics.textFieldHeight,
-                                                 sidePadding: metrics.innerSpacing))
-                    
-                    // 登入按鈕
-                    Button {
-                        vm.onTapLogin()
-                    } label: {
-                        Text(LocalizedStringKey("btn_login"))
-                            .font(.system(size: metrics.textFieldHeight - metrics.innerIconWidth))
-                            .padding(11)
-                            .frame(maxWidth: .infinity)
-                    }
-                    .background(
-                        RoundedRectangle(cornerRadius: 40).foregroundColor(Color("Btn_Color"))
-                    )
-                    .padding(.horizontal, metrics.titleFont)
-                    .padding(.top, metrics.innerSpacing)
-                    .foregroundColor(.white)
                 }
-                .padding(23)
-                .background(RoundedRectangle(cornerRadius: 23).foregroundColor(Color("Linear")))
+                .modifier(InputFieldModifier(height: metrics.textFieldHeight,
+                                             sidePadding: metrics.innerSpacing))
                 
-                // 登入流程 (WebView + Toast)
-                if vm.startLoginProcess {
+                // 密碼輸入
+                HStack {
+                    SFIcon(name: "key.fill",
+                           width: metrics.innerIconWidth,
+                           height: metrics.innerIconHeight)
+                    
+                    ZStack {
+                        if vm.isPasswordVisible {
+                            TextField("",
+                                      text: $vm.password,
+                                      prompt: Text(LocalizedStringKey("pwd"))
+                                        .foregroundColor(.gray))
+                        } else {
+                            SecureField("",
+                                        text: $vm.password,
+                                        prompt: Text(LocalizedStringKey("pwd"))
+                                          .foregroundColor(.gray))
+                        }
+                    }
+                    .textContentType(.password)
+                    .frame(height: metrics.textFieldHeight)
+                    .font(.system(size: metrics.textFieldHeight - metrics.innerIconWidth))
+                    .padding(.leading, metrics.innerPaddingLeft)
+                    .foregroundColor(.black)
+                    
+                    // 顯示/隱藏密碼
+                    SFIcon(name: vm.isPasswordVisible ? "eye.fill" : "eye.slash.fill",
+                           width: metrics.innerIconWidth * 1.5,
+                           height: metrics.innerIconHeight)
+                        .onTapGesture { vm.togglePasswordVisible() }
+                }
+                .modifier(InputFieldModifier(height: metrics.textFieldHeight,
+                                             sidePadding: metrics.innerSpacing))
+                
+                // 登入按鈕
+                Button {
+                    vm.onTapLogin()
+                } label: {
+                    Text(LocalizedStringKey("btn_login"))
+                        .font(.system(size: metrics.textFieldHeight - metrics.innerIconWidth))
+                        .padding(11)
+                        .frame(maxWidth: .infinity)
+                }
+                .background(
+                    RoundedRectangle(cornerRadius: 40).foregroundColor(Color("Btn_Color"))
+                )
+                .padding(.horizontal, metrics.titleFont)
+                .padding(.top, metrics.innerSpacing)
+                .foregroundColor(.white)
+            }
+            .padding(23)
+            .background(RoundedRectangle(cornerRadius: 23).foregroundColor(Color("Linear")))
+            
+            // 登入流程 (WebView + Toast)
+            // 包在 ZStack 懸浮才不會把上方 logo 擠出去
+            ZStack {
+                if vm.startSSOLoginProcess {
+                    SSOLoginWebView(
+                        account: vm.loginAccount,
+                        password: vm.password
+                    ) { result in
+                        vm.handleSSOLoginResult(result)
+                    }
+                    .frame(width: 300, height: 300)
+                    .offset(x: UIScreen.main.bounds.width * 2)
+                    //.frame(height: 300)
+                }
+                if vm.startZuvioLoginProcess {
                     ZuvioLoginWebView(
                         account: vm.zuvioLoginEmail,
                         password: vm.password
                     ) { success in
-                        vm.handleLoginResult(success)
+                        vm.handleZuvioLoginResult(success)
                     }
                     .frame(width: 300, height: 300)
                     .offset(x: UIScreen.main.bounds.width * 2)
                     //.frame(height: 300)
                 }
             }
-            .padding(metrics.mainPadding)
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-            .background(Color("BG_Color"))
             
-            // 登入中 prog (注意！放在這裡才是全版面)
-            ProgressOverlay(isVisible: $vm.showOverlay, text: vm.overlayText)
         }
-        
+        .padding(metrics.mainPadding)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .background(Color("BG_Color"))
+        // 登入中 prog (注意！放在這裡才是全版面)
+        .overlay(
+            ProgressOverlay(isVisible: $vm.showOverlay, text: vm.overlayText)
+        )
         .onAppear {
             // 自動登入邏輯觸發
             vm.autoLogin()
@@ -136,23 +156,63 @@ struct LoginView: View {
                 return Alert(title: Text(LocalizedStringKey("Dialog_Error_Title")),
                              message: Text(LocalizedStringKey("Dialog_Error_EmptyField")),
                              dismissButton: .default(Text(LocalizedStringKey("Dialog_OK"))))
-            case .loginFailed:
+            case .loginFailed: // 已被 sso dialog 取代，不會觸發這個
                 return Alert(title: Text(LocalizedStringKey("login_failed_title")),
                              message: Text(LocalizedStringKey("login_failed_message")),
                              dismissButton: .default(Text(LocalizedStringKey("Dialog_OK"))))
+            // === SSO：完全比照 Android 情境 ===
+            case .ssoCredentialsFailed(let message):
+                return Alert(title: Text(LocalizedStringKey("login_failed_title")),
+                                message: Text(message),
+                                dismissButton: .default(Text(LocalizedStringKey("Dialog_OK"))) {
+                                    vm.startSSOLoginProcess = false
+                                })
+            case .ssoPasswordExpiring(let message):
+                return Alert(title: Text(LocalizedStringKey("Dialog_PWD_almost_expired_Title")),
+                                message: Text(message),
+                                primaryButton: .default(Text(LocalizedStringKey("Dialog_ChangePWD"))) {
+                                    vm.openSSOPasswordChange()
+                                },
+                                secondaryButton: .cancel(Text(LocalizedStringKey("Dialog_ChangePWDLater"))) {
+                                    vm.resumeSSOAfterClosingSweetAlert?()
+                                })
+            case .ssoPasswordExpired(let message):
+                return Alert(title: Text(LocalizedStringKey("Dialog_PWD_expired_Title")),
+                                message: Text(message),
+                                dismissButton: .default(Text(LocalizedStringKey("Dialog_ChangePWD"))) {
+                                    vm.openSSOPasswordChange()
+                                })
+            case .ssoAccountLocked(let lockTime):
+                let messageText: String = lockTime ?? NSLocalizedString(
+                        "Dialog_AccountLocked_Default_Message",
+                        comment: "\n安全起見\n15分鐘內不得登入"
+                    )
+                return Alert(title: Text(LocalizedStringKey("Dialog_AccountLocked_Title")),
+                                message: Text(messageText),
+                                dismissButton: .default(Text(LocalizedStringKey("Dialog_OK"))) {
+                                    vm.startSSOLoginProcess = false
+                                    vm.showOverlay = false
+                                })
+            case .ssoSystemError:
+                return Alert(title: Text(LocalizedStringKey("Dialog_SystemError_Title")),
+                                message: Text(LocalizedStringKey("Dialog_SystemError_Message")),
+                                dismissButton: .default(Text(LocalizedStringKey("Dialog_OK"))) {
+                                    vm.startSSOLoginProcess = false
+                                    vm.showOverlay = false
+                                })
+            case .ssoGeneric(let title, let message):
+                return Alert(title: Text(title),
+                                message: Text(message),
+                                dismissButton: .default(Text(LocalizedStringKey("Dialog_OK"))) {
+                                    vm.startSSOLoginProcess = false
+                                    vm.showOverlay = false
+                                })
             }
         }
-        .toast(isPresented: $vm.showSuccessToast) {
-            Text(LocalizedStringKey("login_success"))
-                .padding()
-                .background(Color("Linear"))
-                .foregroundColor(Color("Text_Color"))
-                .cornerRadius(13)
-            
-        }
-        // 控制畫面跳轉狀態
-        .onChange(of: vm.zuvioLoginSuccess) { newValue in
-            if newValue {
+        // 等兩邊流程都「完成」再判斷是否雙成功，成功才跳頁
+        .onChange(of: vm.loginFinished) { finished in
+            guard finished else { return }
+            if vm.zuvioLoginSuccess && vm.ssoLoginSuccess {
                 appState.navigate(to: .home, withToast: LocalizedStringKey("login_success"))
             }
         }

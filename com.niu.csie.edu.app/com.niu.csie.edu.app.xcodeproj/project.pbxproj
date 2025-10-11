@@ -7,14 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		108474CC2E9A8A2000CEB37C /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 108474CB2E9A8A2000CEB37C /* FirebaseDatabase */; };
+		108474CE2E9A8A3600CEB37C /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 108474CD2E9A8A3600CEB37C /* FirebaseMessaging */; };
+		108474D02E9A8C7F00CEB37C /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 108474CF2E9A8C7F00CEB37C /* FirebaseAuth */; };
+		108474D22E9A94F100CEB37C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 108474D12E9A94F100CEB37C /* GoogleService-Info.plist */; };
 		1A66F7302C88C31000C64130 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1A66F72E2C88C31000C64130 /* Localizable.strings */; };
 		1AA9907D2C8351CD00819A69 /* com_niu_csie_edu_appApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA9907C2C8351CD00819A69 /* com_niu_csie_edu_appApp.swift */; };
 		1AA990812C8351D200819A69 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AA990802C8351D200819A69 /* Assets.xcassets */; };
 		1AA990842C8351D200819A69 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AA990832C8351D200819A69 /* Preview Assets.xcassets */; };
-		50B69C489B3AA436262B5C7F /* Pods_com_niu_csie_edu_app.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 459A3802306E0173DBE4970F /* Pods_com_niu_csie_edu_app.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		108474D12E9A94F100CEB37C /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		10A150EE2E8E560200A1592A /* com-niu-csie-edu-app-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "com-niu-csie-edu-app-Info.plist"; sourceTree = SOURCE_ROOT; };
 		10C8A1492E917ED60091B96F /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		1A66F72F2C88C31000C64130 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -22,30 +26,21 @@
 		1AA9907C2C8351CD00819A69 /* com_niu_csie_edu_appApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = com_niu_csie_edu_appApp.swift; sourceTree = "<group>"; };
 		1AA990802C8351D200819A69 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1AA990832C8351D200819A69 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		2E907C842BAE23121BBCB31E /* Pods-com.niu.csie.edu.app.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-com.niu.csie.edu.app.release.xcconfig"; path = "Target Support Files/Pods-com.niu.csie.edu.app/Pods-com.niu.csie.edu.app.release.xcconfig"; sourceTree = "<group>"; };
-		2FCF16F3D73999C0D85AB847 /* Pods-com.niu.csie.edu.app.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-com.niu.csie.edu.app.debug.xcconfig"; path = "Target Support Files/Pods-com.niu.csie.edu.app/Pods-com.niu.csie.edu.app.debug.xcconfig"; sourceTree = "<group>"; };
-		459A3802306E0173DBE4970F /* Pods_com_niu_csie_edu_app.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_com_niu_csie_edu_app.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		10A150EB2E8E50B300A1592A /* Fonts */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = Fonts;
 			sourceTree = "<group>";
 		};
 		10C8A19F2E93B5F20091B96F /* Common */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = Common;
 			sourceTree = "<group>";
 		};
 		1AD8AA292E8B6D7D00A2D2E6 /* Features */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = Features;
 			sourceTree = "<group>";
 		};
@@ -56,21 +51,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				50B69C489B3AA436262B5C7F /* Pods_com_niu_csie_edu_app.framework in Frameworks */,
+				108474CE2E9A8A3600CEB37C /* FirebaseMessaging in Frameworks */,
+				108474D02E9A8C7F00CEB37C /* FirebaseAuth in Frameworks */,
+				108474CC2E9A8A2000CEB37C /* FirebaseDatabase in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1147320A0916C1D237A5EC11 /* Pods */ = {
+		108474CA2E9A8A2000CEB37C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2FCF16F3D73999C0D85AB847 /* Pods-com.niu.csie.edu.app.debug.xcconfig */,
-				2E907C842BAE23121BBCB31E /* Pods-com.niu.csie.edu.app.release.xcconfig */,
 			);
-			name = Pods;
-			path = Pods;
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		1A66F72D2C88C29400C64130 /* Resources */ = {
@@ -79,6 +73,7 @@
 				10A150EB2E8E50B300A1592A /* Fonts */,
 				1AA990802C8351D200819A69 /* Assets.xcassets */,
 				1A66F72E2C88C31000C64130 /* Localizable.strings */,
+				108474D12E9A94F100CEB37C /* GoogleService-Info.plist */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -87,9 +82,8 @@
 			isa = PBXGroup;
 			children = (
 				1AA9907B2C8351CD00819A69 /* com.niu.csie.edu.app */,
+				108474CA2E9A8A2000CEB37C /* Frameworks */,
 				1AA9907A2C8351CD00819A69 /* Products */,
-				1147320A0916C1D237A5EC11 /* Pods */,
-				EAA503A5222E86BA8BD9BD55 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -122,14 +116,6 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		EAA503A5222E86BA8BD9BD55 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				459A3802306E0173DBE4970F /* Pods_com_niu_csie_edu_app.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -137,12 +123,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1AA990872C8351D200819A69 /* Build configuration list for PBXNativeTarget "com.niu.csie.edu.app" */;
 			buildPhases = (
-				23ABE974736622FECED5F03C /* [CP] Check Pods Manifest.lock */,
 				1AA990752C8351CD00819A69 /* Sources */,
 				1AA990762C8351CD00819A69 /* Frameworks */,
 				1AA990772C8351CD00819A69 /* Resources */,
-				F7AFC4E22CF016F70BEA2C3B /* [CP] Embed Pods Frameworks */,
-				FCA9454751771CF9AA24B139 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -181,6 +164,9 @@
 				"zh-Hant",
 			);
 			mainGroup = 1AA990702C8351CD00819A69;
+			packageReferences = (
+				108474C92E9A8A0E00CEB37C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 1AA9907A2C8351CD00819A69 /* Products */;
 			projectDirPath = "";
@@ -198,70 +184,12 @@
 			files = (
 				1AA990842C8351D200819A69 /* Preview Assets.xcassets in Resources */,
 				1A66F7302C88C31000C64130 /* Localizable.strings in Resources */,
+				108474D22E9A94F100CEB37C /* GoogleService-Info.plist in Resources */,
 				1AA990812C8351D200819A69 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		23ABE974736622FECED5F03C /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-com.niu.csie.edu.app-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		F7AFC4E22CF016F70BEA2C3B /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-com.niu.csie.edu.app/Pods-com.niu.csie.edu.app-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-com.niu.csie.edu.app/Pods-com.niu.csie.edu.app-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-com.niu.csie.edu.app/Pods-com.niu.csie.edu.app-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		FCA9454751771CF9AA24B139 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-com.niu.csie.edu.app/Pods-com.niu.csie.edu.app-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-com.niu.csie.edu.app/Pods-com.niu.csie.edu.app-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-com.niu.csie.edu.app/Pods-com.niu.csie.edu.app-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		1AA990752C8351CD00819A69 /* Sources */ = {
@@ -410,7 +338,6 @@
 		};
 		1AA990882C8351D200819A69 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2FCF16F3D73999C0D85AB847 /* Pods-com.niu.csie.edu.app.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -421,17 +348,18 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "com-niu-csie-edu-app-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = NIU_APP_IOS;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "NIU-APP.com-niu-csie-edu-app";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -446,7 +374,6 @@
 		};
 		1AA990892C8351D200819A69 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2E907C842BAE23121BBCB31E /* Pods-com.niu.csie.edu.app.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -457,17 +384,18 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "com-niu-csie-edu-app-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = NIU_APP_IOS;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "NIU-APP.com-niu-csie-edu-app";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -502,6 +430,35 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		108474C92E9A8A0E00CEB37C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.4.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		108474CB2E9A8A2000CEB37C /* FirebaseDatabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 108474C92E9A8A0E00CEB37C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDatabase;
+		};
+		108474CD2E9A8A3600CEB37C /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 108474C92E9A8A0E00CEB37C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
+		108474CF2E9A8C7F00CEB37C /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 108474C92E9A8A0E00CEB37C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 1AA990712C8351CD00819A69 /* Project object */;
 }

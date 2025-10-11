@@ -12,6 +12,14 @@
 "login_failed_message" = "帳號或密碼錯誤！！";
 "Dialog_Error_Title" = "錯誤！";
 "Dialog_Error_EmptyField" = "帳號或密碼不得為空！！";
+"Dialog_SystemError_Title" = "系統錯誤！";
+"Dialog_SystemError_Message" = "發生未知錯誤，請稍後再試";
+"Dialog_PWD_almost_expired_Title" = "密碼即將到期";
+"Dialog_PWD_expired_Title" = "密碼已到期";
+"Dialog_ChangePWD" = "修改密碼";
+"Dialog_ChangePWDLater" = "稍後再說";
+"Dialog_AccountLocked_Title" = "帳號鎖定！";
+"Dialog_AccountLocked_Default_Message" = "\n安全起見\n15分鐘內不得登入";
 "Dialog_Cancel" = "取消";
 "Dialog_OK" = "OK";
 // HomeView

@@ -1,7 +1,0 @@
-platform :ios, '16.0'
-use_frameworks!
-
-target 'com.niu.csie.edu.app' do
-  # ML Kit OCR (英文＋數字版)
-  pod 'GoogleMLKit/TextRecognition', '8.0.0'
-end

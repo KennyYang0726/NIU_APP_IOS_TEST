@@ -60,6 +60,7 @@ struct BusView: View {
                 WebViewContainer(webView: WebBus.webView)
                     .opacity(WebBus.isVisible ? 1 : 0)
                     .animation(.easeInOut(duration: 0.2), value: WebBus.isVisible)
+                    .ignoresSafeArea(edges: .bottom)
                         
                 ProgressOverlay(isVisible: $showOverlay, text: overlayText)
             }
