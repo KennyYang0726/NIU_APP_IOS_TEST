@@ -160,8 +160,8 @@ final class LoginViewModel: ObservableObject {
         loginFinished = true
 
         if zuvioLoginSuccess && ssoLoginSuccess {
-            // 記錄帳密
-            repository.saveCredentials(username: account, password: password)
+            // 記錄帳密 (強制轉大寫)
+            repository.saveCredentials(username: account.uppercased(), password: password)
         } else {
             // 清除帳密記錄
             repository.clearCredentials()

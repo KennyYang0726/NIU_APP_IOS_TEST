@@ -7,8 +7,10 @@
 "pwd" = "密碼";
 "btn_login" = "登入";
 "logining" = "登入中...";
+"logouting" = "登出中...";
 "login_success" = "登入成功！";
 "login_failed_title" = "登入失敗";
+"logout_success" = "登出成功！";
 "login_failed_message" = "帳號或密碼錯誤！！";
 "Dialog_Error_Title" = "錯誤！";
 "Dialog_Error_EmptyField" = "帳號或密碼不得為空！！";

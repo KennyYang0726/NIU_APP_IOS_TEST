@@ -49,9 +49,12 @@ public enum SSOLoginResult {
 }
 
 public struct SSOLoginWebView: UIViewRepresentable {
+
     public let account: String
     public let password: String
     public let onResult: (SSOLoginResult) -> Void
+    
+    @EnvironmentObject var settings: AppSettings // 為了寫入 姓名
 
     public init(account: String, password: String, onResult: @escaping (SSOLoginResult) -> Void) {
         self.account = account
@@ -60,7 +63,8 @@ public struct SSOLoginWebView: UIViewRepresentable {
     }
 
     public func makeCoordinator() -> Coordinator {
-        Coordinator(parent: self)
+        // 關鍵：把需要的依賴直接注入給 Coordinator
+        Coordinator(settings: settings, parent: self)
     }
 
     public func makeUIView(context: Context) -> WKWebView {
@@ -85,11 +89,13 @@ public struct SSOLoginWebView: UIViewRepresentable {
 
     // MARK: - Coordinator
     public class Coordinator: NSObject, WKNavigationDelegate {
+        private let settings: AppSettings
         private let parent: SSOLoginWebView
         private var isProcessingCaptcha = false
         private var getSSOViewState = false
 
-        init(parent: SSOLoginWebView) {
+        init(settings: AppSettings, parent: SSOLoginWebView) {
+            self.settings = settings
             self.parent = parent
         }
 
@@ -101,8 +107,25 @@ public struct SSOLoginWebView: UIViewRepresentable {
             // === URL 判斷邏輯 ===
             if urlStr.contains("StdMain.aspx") {
                 print("[SSO] Login success → onResult(.success)")
-                parent.onResult(.success)
-                return
+                // 網頁擷取姓名，再將姓名儲存於 sp
+                let GetNameJS = """
+                (function() {
+                    var span = document.getElementById('Label1');
+                    if (!span) return '';
+                    var text = span.innerText || span.textContent;
+                    var match = text.match(/姓名：([^<]+)/);
+                    return match ? match[1].trim() : '';
+                })();
+                """
+                webView.evaluateJavaScript(GetNameJS) { result, error in
+                    if let name = result as? String {
+                        // 儲存到 UserDefaults (iOS 相當於 Android 的 SharedPreferences)
+                        self.settings.name = name
+                        // print("✅ Name: \(name)")
+                    }
+                    self.parent.onResult(.success)
+                    return
+                }
             }
 
             if urlStr.contains("AccountLock.aspx") {
@@ -275,7 +298,11 @@ public struct SSOLoginWebView: UIViewRepresentable {
                         self.isProcessingCaptcha = false
                         // 如果 OCR 失敗，重新開始登入流程
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                            self.Login_SSO(in: webView)
+                            //self.Login_SSO(in: webView)
+                            if let url = URL(string: "https://ccsys.niu.edu.tw/SSO/Default.aspx") {
+                                let request = URLRequest(url: url)
+                                webView.load(request)
+                            }
                         }
                     }
                 }

@@ -4,12 +4,13 @@ import SwiftUI
 
 struct DrawerView: View {
     @ObservedObject var vm: DrawerManagerViewModel
+    @EnvironmentObject var settings: AppSettings
     
     private let isPad = UIDevice.current.userInterfaceIdiom == .pad
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text(vm.userName)
+            Text(settings.name)
                 .font(isPad ? .title : .title3)  // iPad 放大字體
                 .fontWeight(.semibold)
                 .foregroundColor(.white)
@@ -54,7 +55,11 @@ struct DrawerView: View {
         .padding(.vertical, isPad ? 12 : 8)
         .contentShape(Rectangle())
         .onTapGesture {
-            vm.switchPage(to: page)
+            if page == .logout {
+                vm.performLogout() // 無需執行跳頁
+            } else {
+                vm.switchPage(to: page)
+            }
         }
     }
 }

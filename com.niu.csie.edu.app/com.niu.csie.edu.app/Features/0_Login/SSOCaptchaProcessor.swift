@@ -197,7 +197,6 @@ public final class SSOCaptchaProcessor {
 
     private func crop(image: UIImage, rect: CGRect) -> UIImage? {
         guard let cg = image.cgImage else { return nil }
-        let scale = image.scale
         let r = CGRect(x: rect.origin.x * CGFloat(cg.width),
                        y: (1 - rect.origin.y - rect.height) * CGFloat(cg.height),
                        width: rect.width * CGFloat(cg.width),

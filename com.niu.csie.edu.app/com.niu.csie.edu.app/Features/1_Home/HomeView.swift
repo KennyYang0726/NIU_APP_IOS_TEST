@@ -27,11 +27,23 @@ let defaultFeatures: [HomeFeature] = [
 
 // MARK: - HomeView
 struct HomeView: View {
-    @StateObject private var vm = HomeViewModel()
+    @StateObject private var vm: HomeViewModel
+    //@StateObject private var vm = HomeViewModel(appSettings: AppSettings)
     @ObservedObject var drawerVM: DrawerManagerViewModel
     @Environment(\.horizontalSizeClass) private var hSizeClass
     
     @EnvironmentObject var appState: AppState // 注入狀態
+    @EnvironmentObject var appSettings: AppSettings // 注入狀態
+    
+    // WebView 是為了執行登出，以及 sso 擷取 SSO_ID
+    @StateObject private var WebZuvio = WebView_Provider(
+        initialURL: "https://irs.zuvio.com.tw/student5/setting/index",
+        userAgent: .mobile
+    )
+    @StateObject private var WebSSO = WebView_Provider(
+        initialURL: "https://ccsys.niu.edu.tw/SSO/Std002.aspx",
+        userAgent: .mobile
+    )
 
     private let title = "首頁"
 
@@ -40,6 +52,12 @@ struct HomeView: View {
         [GridItem(.flexible(), spacing: 20),
          GridItem(.flexible(), spacing: 20),
          GridItem(.flexible(), spacing: 20)]
+    }
+    
+    // 在 init 中建立 ViewModel 並注入 appSettings
+    init(drawerVM: DrawerManagerViewModel, appSettings: AppSettings = AppSettings()) {
+        self._vm = StateObject(wrappedValue: HomeViewModel(appSettings: appSettings))
+        self.drawerVM = drawerVM
     }
 
     var body: some View {
@@ -79,6 +97,17 @@ struct HomeView: View {
                             .frame(height: 0) // 不要影響 ScrollView 高度
                             
                             // 測試
+                            // ZStack {}
+                            WebViewContainer(webView: WebZuvio.webView)
+                                .opacity(WebZuvio.isVisible ? 1 : 0)
+                                .frame(width: 300, height: 300)
+                                //.offset(x: UIScreen.main.bounds.width * 2)
+                                
+                            WebViewContainer(webView: WebSSO.webView)
+                                .opacity(WebSSO.isVisible ? 1 : 0)
+                                .frame(width: 300, height: 300)
+                                //.offset(x: UIScreen.main.bounds.width * 2)
+                                
                         
                             
                         }
@@ -98,6 +127,19 @@ struct HomeView: View {
             .toolbarColorScheme(.dark, for: .navigationBar)
             .navigationBarTitleDisplayMode(.inline) // 固定使用小標題樣式
         }
+        // 登出中 prog (注意！放在這裡才是全版面)
+        .overlay(
+            ProgressOverlay(isVisible: $vm.showOverlay, text: vm.overlayText)
+        )
+        .onAppear {
+            // 把 Drawer 登出事件綁定到 Home VM
+            drawerVM.onLogout = {
+                vm.logout(zuvioWeb: WebZuvio, ssoWeb: WebSSO)
+            }
+        }
+        // 當兩者皆登出完成時，在這裡觸發動作
+        .onChange(of: vm.Zuvio_Login) { _ in checkAllLoggedOut() }
+        .onChange(of: vm.SSO_Login) { _ in checkAllLoggedOut() }
     }
     
 
@@ -116,6 +158,14 @@ struct HomeView: View {
         case 9:     return .Take_Leave
         case 10:    return .Mail
         default:    return nil
+        }
+    }
+    
+    // 所有Web登出完畢
+    private func checkAllLoggedOut() {
+        if !vm.Zuvio_Login && !vm.SSO_Login {
+            // print("[HomeView] 所有系統皆完成登出，可執行後續操作")
+            appState.navigate(to: .login, withToast: LocalizedStringKey("logout_success"))
         }
     }
 }
@@ -163,6 +213,6 @@ private struct FeatureItemView: View {
 
 // MARK: - 預覽
 #Preview {
-    HomeView(drawerVM: DrawerManagerViewModel())
+    HomeView(drawerVM: DrawerManagerViewModel(), appSettings: AppSettings())
 }
 

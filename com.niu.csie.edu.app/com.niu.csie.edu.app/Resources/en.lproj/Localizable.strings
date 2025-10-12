@@ -7,8 +7,10 @@
 "pwd" = "password";
 "btn_login" = "Login";
 "logining" = "login...";
+"logouting" = "logout...";
 "login_success" = "Login successfully";
 "login_failed_title" = "Login failed";
+"logout_success" = "Logout successfully";
 "login_failed_message" = "Wrong account or password";
 "Dialog_Error_Title" = "Error!";
 "Dialog_Error_EmptyField" = "Field can not be empty";

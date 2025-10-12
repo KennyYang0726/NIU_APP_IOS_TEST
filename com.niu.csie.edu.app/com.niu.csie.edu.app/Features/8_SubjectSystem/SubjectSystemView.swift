@@ -7,11 +7,12 @@ struct SubjectSystemView: View {
     @EnvironmentObject var appState: AppState // 注入狀態
     
     @StateObject private var WebSubjectSystem = WebView_Provider(
-        initialURL: "https://irs.zuvio.com.tw/student5/irs/index",
+        initialURL: "https://ccsys.niu.edu.tw/SSO/StdMain.aspx",
         userAgent: .desktop
     )
     
-    @State private var showOverlay = true
+    @State private var showOverlay = false
+    //@State private var showOverlay = true
     @State private var overlayText: LocalizedStringKey = "loading"
     // @State private var overlayText = "載入中..."
     
