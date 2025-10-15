@@ -139,6 +139,27 @@ class WebView_Provider: ObservableObject {
             }
         }
     }
+    
+    // MARK: - 清除緩存資訊(會導致登出)
+    public func clearCache(completion: (() -> Void)? = nil) {
+        // 清除所有類型的網站資料
+        let dataStore = WKWebsiteDataStore.default()
+        let allTypes = WKWebsiteDataStore.allWebsiteDataTypes()
+        let sinceDate = Date(timeIntervalSince1970: 0)
+
+        dataStore.fetchDataRecords(ofTypes: allTypes) { records in
+            dataStore.removeData(ofTypes: allTypes, modifiedSince: sinceDate) {
+                // 額外清除 cookies
+                HTTPCookieStorage.shared.removeCookies(since: sinceDate)
+                URLCache.shared.removeAllCachedResponses()
+
+                DispatchQueue.main.async {
+                    completion?()
+                }
+            }
+        }
+    }
+
 
     // MARK: - 準備流程（先隱藏→做事→再顯示）
     /// 直接進入「先隱藏、跑 actions、完成後顯示」的流程

@@ -56,3 +56,6 @@
 "delete_user_data" = "delete user data";
 
 "Logout" = "登出";
+
+// 選課系統
+"currently_not_a_course_selection_time" = "not in selection time！";

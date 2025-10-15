@@ -55,7 +55,7 @@ struct DrawerManagerView: View {
         switch page {
         case .home: HomeView(drawerVM: vm)
         case .announcements: Drawer_AnnouncementsView(vm: vm)
-        case .calendar: Drawer_CalendarView(vm: vm)
+        case .calendar: Drawer_CalendarView()
         case .questionnaire: Drawer_QuestionnaireView()
         case .achievements: Drawer_AchievementsView(vm: vm)
         case .huh: Drawer_HuhView(vm: vm)

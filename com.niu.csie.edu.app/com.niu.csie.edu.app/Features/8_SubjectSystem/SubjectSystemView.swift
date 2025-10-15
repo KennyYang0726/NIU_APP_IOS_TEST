@@ -7,14 +7,16 @@ struct SubjectSystemView: View {
     @EnvironmentObject var appState: AppState // 注入狀態
     
     @StateObject private var WebSubjectSystem = WebView_Provider(
-        initialURL: "https://ccsys.niu.edu.tw/SSO/StdMain.aspx",
+        initialURL: "about:blank",
         userAgent: .desktop
     )
     
-    @State private var showOverlay = false
-    //@State private var showOverlay = true
+    @State private var showOverlay = true
     @State private var overlayText: LocalizedStringKey = "loading"
     // @State private var overlayText = "載入中..."
+    
+    let sso = SSOIDSettings.shared
+    
     
     public var body: some View {
         AppBar_Framework(title: "Subject_System") {
@@ -26,7 +28,19 @@ struct SubjectSystemView: View {
 
                 ProgressOverlay(isVisible: $showOverlay, text: overlayText)
             }
-            .onAppear {}
+            .onAppear {
+                // 註冊 alert handler
+                WebSubjectSystem.onJsAlert = { message in
+                    if message.contains("選課期間") {
+                        print("onAlert 收到：\(message)")
+                        appState.navigate(to: .home, withToast: LocalizedStringKey("currently_not_a_course_selection_time"))
+                    }
+                }
+
+                // 載入頁面
+                let fullURL = "https://ccsys.niu.edu.tw/SSO/" + sso.acade_subject_system
+                WebSubjectSystem.load(url: fullURL)
+            }
         }
     }
     

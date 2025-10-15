@@ -197,3 +197,19 @@ final class LoginViewModel: ObservableObject {
     }*/
 }
 
+
+
+extension LoginViewModel {
+    /// 回到 Login 畫面或準備新的登入嘗試時，先把流程狀態清掉
+    func resetForFreshAttempt() {
+        showOverlay = false
+        zuvioLoginSuccess = false
+        ssoLoginSuccess = false
+        loginFinished = false
+        startZuvioLoginProcess = false
+        startSSOLoginProcess = false
+        // 若有使用 Alert 狀態，也建議清一下，避免殘留：
+        // LoginActiveAlert = nil
+    }
+}
+

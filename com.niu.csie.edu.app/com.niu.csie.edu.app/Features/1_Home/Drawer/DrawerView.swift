@@ -5,6 +5,8 @@ import SwiftUI
 struct DrawerView: View {
     @ObservedObject var vm: DrawerManagerViewModel
     @EnvironmentObject var settings: AppSettings
+    @EnvironmentObject var appState: AppState
+    @EnvironmentObject var session: SessionManager
     
     private let isPad = UIDevice.current.userInterfaceIdiom == .pad
     
@@ -56,7 +58,9 @@ struct DrawerView: View {
         .contentShape(Rectangle())
         .onTapGesture {
             if page == .logout {
-                vm.performLogout() // 無需執行跳頁
+                session.logout(appState: appState,
+                               appSettings: settings,
+                               loginRepo: LoginRepository()) // 無需執行跳頁
             } else {
                 vm.switchPage(to: page)
             }

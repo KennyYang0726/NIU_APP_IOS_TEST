@@ -1,5 +1,5 @@
 {
-  "originHash" : "c63c63846d9c539229e96de38d6af51417e28c0ee9a0bc48bd0f0f19d923c329",
+  "originHash" : "0145b4092643f8fbca9d29ba4c9f71f8f61bf92716e339897ca96f18abc29158",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -107,6 +107,15 @@
       "state" : {
         "revision" : "b7e1104502eca3a213b46303391ca4d3bc8ddec1",
         "version" : "2.30910.0"
+      }
+    },
+    {
+      "identity" : "pdfviewer",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/rajubd49/PDFViewer.git",
+      "state" : {
+        "revision" : "d228974c60fe723ad98b690611973184a934ad72",
+        "version" : "1.0.2"
       }
     },
     {

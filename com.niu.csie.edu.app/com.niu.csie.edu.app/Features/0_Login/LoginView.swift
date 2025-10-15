@@ -145,6 +145,8 @@ struct LoginView: View {
             ProgressOverlay(isVisible: $vm.showOverlay, text: vm.overlayText)
         )
         .onAppear {
+            // 先把所有可能影響登入的狀態重置
+            vm.resetForFreshAttempt()
             // 自動登入邏輯觸發
             vm.autoLogin()
         }

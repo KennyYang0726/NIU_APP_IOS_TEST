@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		10702B2C2E9E010500136301 /* PDFViewer in Frameworks */ = {isa = PBXBuildFile; productRef = 10702B2B2E9E010500136301 /* PDFViewer */; };
 		108474CC2E9A8A2000CEB37C /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 108474CB2E9A8A2000CEB37C /* FirebaseDatabase */; };
 		108474CE2E9A8A3600CEB37C /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 108474CD2E9A8A3600CEB37C /* FirebaseMessaging */; };
 		108474D02E9A8C7F00CEB37C /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 108474CF2E9A8C7F00CEB37C /* FirebaseAuth */; };
 		108474D22E9A94F100CEB37C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 108474D12E9A94F100CEB37C /* GoogleService-Info.plist */; };
 		1A66F7302C88C31000C64130 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1A66F72E2C88C31000C64130 /* Localizable.strings */; };
-		1AA9907D2C8351CD00819A69 /* com_niu_csie_edu_appApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA9907C2C8351CD00819A69 /* com_niu_csie_edu_appApp.swift */; };
 		1AA990812C8351D200819A69 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AA990802C8351D200819A69 /* Assets.xcassets */; };
 		1AA990842C8351D200819A69 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AA990832C8351D200819A69 /* Preview Assets.xcassets */; };
 /* End PBXBuildFile section */
@@ -23,12 +23,21 @@
 		10C8A1492E917ED60091B96F /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		1A66F72F2C88C31000C64130 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		1AA990792C8351CD00819A69 /* com.niu.csie.edu.app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = com.niu.csie.edu.app.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		1AA9907C2C8351CD00819A69 /* com_niu_csie_edu_appApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = com_niu_csie_edu_appApp.swift; sourceTree = "<group>"; };
 		1AA990802C8351D200819A69 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1AA990832C8351D200819A69 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		10702B092E9D0DA200136301 /* Services */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Services;
+			sourceTree = "<group>";
+		};
+		10702B142E9D0E7F00136301 /* App */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = App;
+			sourceTree = "<group>";
+		};
 		10A150EB2E8E50B300A1592A /* Fonts */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Fonts;
@@ -52,6 +61,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				108474CE2E9A8A3600CEB37C /* FirebaseMessaging in Frameworks */,
+				10702B2C2E9E010500136301 /* PDFViewer in Frameworks */,
 				108474D02E9A8C7F00CEB37C /* FirebaseAuth in Frameworks */,
 				108474CC2E9A8A2000CEB37C /* FirebaseDatabase in Frameworks */,
 			);
@@ -101,8 +111,9 @@
 				10A150EE2E8E560200A1592A /* com-niu-csie-edu-app-Info.plist */,
 				1AD8AA292E8B6D7D00A2D2E6 /* Features */,
 				10C8A19F2E93B5F20091B96F /* Common */,
+				10702B092E9D0DA200136301 /* Services */,
+				10702B142E9D0E7F00136301 /* App */,
 				1A66F72D2C88C29400C64130 /* Resources */,
-				1AA9907C2C8351CD00819A69 /* com_niu_csie_edu_appApp.swift */,
 				1AA990822C8351D200819A69 /* Preview Content */,
 			);
 			path = com.niu.csie.edu.app;
@@ -132,6 +143,8 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				10702B092E9D0DA200136301 /* Services */,
+				10702B142E9D0E7F00136301 /* App */,
 				10A150EB2E8E50B300A1592A /* Fonts */,
 				10C8A19F2E93B5F20091B96F /* Common */,
 				1AD8AA292E8B6D7D00A2D2E6 /* Features */,
@@ -166,6 +179,7 @@
 			mainGroup = 1AA990702C8351CD00819A69;
 			packageReferences = (
 				108474C92E9A8A0E00CEB37C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				10702B2A2E9E010500136301 /* XCRemoteSwiftPackageReference "PDFViewer" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 1AA9907A2C8351CD00819A69 /* Products */;
@@ -196,7 +210,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1AA9907D2C8351CD00819A69 /* com_niu_csie_edu_appApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -432,6 +445,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		10702B2A2E9E010500136301 /* XCRemoteSwiftPackageReference "PDFViewer" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/rajubd49/PDFViewer.git";
+			requirement = {
+				kind = exactVersion;
+				version = 1.0.2;
+			};
+		};
 		108474C92E9A8A0E00CEB37C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -443,6 +464,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		10702B2B2E9E010500136301 /* PDFViewer */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 10702B2A2E9E010500136301 /* XCRemoteSwiftPackageReference "PDFViewer" */;
+			productName = PDFViewer;
+		};
 		108474CB2E9A8A2000CEB37C /* FirebaseDatabase */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 108474C92E9A8A0E00CEB37C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;

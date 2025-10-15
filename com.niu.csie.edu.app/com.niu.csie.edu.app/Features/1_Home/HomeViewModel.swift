@@ -1,6 +1,7 @@
 import Foundation
 import SwiftUI
 import Combine
+import FirebaseAuth
 
 
 /// MVVM: 負責「狀態」與「業務邏輯」
@@ -42,8 +43,10 @@ final class HomeViewModel: ObservableObject {
 
     init(appSettings: AppSettings) {
         self.appSettings = appSettings
+        if Auth.auth().currentUser != nil { // 若匿名登入成功
+            FirebaseDatabaseManager.shared.ensureUserNodeExists(for: loginRepo.loadCredentials()!.username, name: appSettings.name)
+            }
     }
-    
     
     // 登出主流程
     func logout(zuvioWeb: WebView_Provider, ssoWeb: WebView_Provider) {
@@ -52,9 +55,11 @@ final class HomeViewModel: ObservableObject {
 
         // 執行兩個 WebView 的登出 JS
         zuvioWeb.evaluateJS(Zuvio_Logout_JS) { result in
+            zuvioWeb.clearCache()
             self.Zuvio_Login = false
         }
         ssoWeb.evaluateJS(SSO_Logout_JS) { result in
+            ssoWeb.clearCache()
             self.SSO_Login = false
         }
 
@@ -63,5 +68,4 @@ final class HomeViewModel: ObservableObject {
         // 清空姓名
         appSettings.name = ""
     }
-    
 }
