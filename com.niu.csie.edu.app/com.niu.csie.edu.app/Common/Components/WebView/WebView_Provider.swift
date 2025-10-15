@@ -116,6 +116,16 @@ class WebView_Provider: ObservableObject {
         guard let u = URL(string: url) else { return }
         webView.load(URLRequest(url: u))
     }
+    
+    // 帶 header 的，校務行政子頁面
+    public func load(url: String, headers: [String: String]) {
+        guard let u = URL(string: url) else { return }
+        var req = URLRequest(url: u)
+        headers.forEach { k, v in
+            req.setValue(v, forHTTPHeaderField: k)
+        }
+        webView.load(req)
+    }
 
     public func loadHTML(_ html: String, baseURL: URL? = nil) {
         webView.loadHTMLString(html, baseURL: baseURL)

@@ -71,6 +71,11 @@ final class SessionManager: ObservableObject {
                     let acadeMain = result.hrefs.indices.contains(0) ? (result.hrefs[0] ?? "") : ""
                     let acadeSubject = result.hrefs.indices.contains(1) ? (result.hrefs[1] ?? "") : ""
                     let euni = result.hrefs.indices.contains(2) ? (result.hrefs[2] ?? "") : ""
+                    
+                    // DEBUG
+                    print("ACADE_MAIN:\(acadeMain)")
+                    print("ACADE_Subject:\(acadeSubject)")
+                    print("EUNI:\(euni)")
 
                     // 直接寫入你剛做好的 SSOIDSettings（會自動存到 suite "SSOID"）
                     SSOIDSettings.shared.bulkUpdate(
@@ -99,6 +104,8 @@ final class SessionManager: ObservableObject {
 
                         self.webSSO.evaluateJS(GetID_JS2) { href in
                             if let href = href, !href.isEmpty {
+                                // DEBUG
+                                print("CCSYS:\(href)")
                                 SSOIDSettings.shared.ccsys = href
                             }
                             // 兩段都完成才結束 refresh 中的旗標

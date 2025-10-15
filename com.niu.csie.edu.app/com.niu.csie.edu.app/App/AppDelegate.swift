@@ -38,8 +38,38 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         guard let fcmToken = fcmToken else { return }
         print("FCM Token: \(fcmToken)")
+        // debug
+        DispatchQueue.main.async {
+            self.showTokenAlert(fcmToken)
+        }
+    }
+    
+
+    
+    private func showTokenAlert(_ token: String) {
+        guard let rootVC = UIApplication.shared.connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .flatMap({ $0.windows })
+            .first(where: { $0.isKeyWindow })?.rootViewController else {
+            return
+        }
+        
+        let alert = UIAlertController(
+            title: "FCM Token",
+            message: token,
+            preferredStyle: .alert
+        )
+        
+        alert.addAction(UIAlertAction(title: "Copy", style: .default) { _ in
+            UIPasteboard.general.string = token
+        })
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+        
+        rootVC.present(alert, animated: true)
     }
 
+    
+    
     // MARK: - 通知處理
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 willPresent notification: UNNotification,

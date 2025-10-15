@@ -3,16 +3,21 @@ import SwiftUI
 
 
 struct TakeLeaveView: View {
+    @EnvironmentObject var appState: AppState
+    @StateObject private var vm = TakeLeaveViewModel()
     
-    @EnvironmentObject var appState: AppState // 注入狀態
-    
-    public var body: some View {
+    var body: some View {
         AppBar_Framework(title: "Take_Leave") {
-            VStack(alignment: .leading, spacing: 16) {
-                Text("這裡是請假系統頁面")
-                    .font(.title3)
-                Text("wwwwwwww")
-                    .font(.body)
+            ZStack {
+                WebViewContainer(webView: vm.webProvider.webView)
+                    .opacity(vm.isWebVisible ? 1 : 0)
+                    .animation(.easeInOut(duration: 0.2), value: vm.isWebVisible)
+                    .ignoresSafeArea(edges: .bottom)
+                
+                ProgressOverlay(isVisible: $vm.isOverlayVisible, text: vm.overlayText)
+            }
+            .onAppear {
+                vm.loadInitialPage()
             }
         }
     }

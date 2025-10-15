@@ -395,6 +395,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"com.niu.csie.edu.app/Preview Content\"";
 				DEVELOPMENT_TEAM = BWSZ53MRGH;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_TESTABILITY = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "com-niu-csie-edu-app-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = NIU_APP_IOS;
