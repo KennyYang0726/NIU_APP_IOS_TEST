@@ -1,11 +1,12 @@
-1. 登出完整實現
+1. Tab+ViewPager Layout 實現 (活動報名+聯絡我們)
 2. DATABASE完成9成，剩下讀取EXAMPLE和寫入FUNC
-3. 選課系統實現
-4. 請假系統實現
-5. 下面4功能 MVVM架構重構
+3. 
+4. 
+5. 
 
 
 
 TODO:
-1. 
-2. 
+1. 行事曆改用 database url
+2. UI建構 (聯絡我們)
+3. FCM 好像有問題

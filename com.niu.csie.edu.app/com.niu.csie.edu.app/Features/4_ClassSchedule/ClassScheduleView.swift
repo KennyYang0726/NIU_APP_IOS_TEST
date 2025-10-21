@@ -4,15 +4,25 @@ import SwiftUI
 
 struct ClassScheduleView: View {
     
-    @EnvironmentObject var appState: AppState // 注入狀態
+    @EnvironmentObject var appState: AppState
+    @Environment(\.colorScheme) var colorScheme
     
-    public var body: some View {
+    @StateObject private var vm = ClassScheduleViewModel()
+    
+    var body: some View {
         AppBar_Framework(title: "Class_Schedule") {
-            VStack(alignment: .leading, spacing: 16) {
-                Text("這裡是課表查詢頁面")
-                    .font(.title3)
-                Text("wwwwwwww")
-                    .font(.body)
+            ZStack {
+                WebViewContainer(webView: vm.webProvider.webView)
+                    .opacity(vm.isWebVisible ? 1 : 0)
+                    .animation(.easeInOut(duration: 0.2), value: vm.isWebVisible)
+                    .ignoresSafeArea(edges: .bottom)
+                
+                ProgressOverlay(isVisible: $vm.isOverlayVisible, text: vm.overlayText)
+            }
+            .onAppear {
+                // 初始化狀態
+                vm.loadInitialPage()
+                vm.colorScheme = colorScheme
             }
         }
     }

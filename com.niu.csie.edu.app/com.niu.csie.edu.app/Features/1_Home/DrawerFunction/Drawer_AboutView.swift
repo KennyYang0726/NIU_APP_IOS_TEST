@@ -10,7 +10,7 @@ struct Drawer_AboutView: View {
                 
                 // === Developer 區塊 ===
                 VStack(spacing: isPad ? 24 : 16) {
-                    Text("開發者")
+                    Text(LocalizedStringKey("Developer"))
                         .font(.system(size: isPad ? 90 : 41, weight: .bold))
                         .foregroundColor(Color("Text_Color"))
                         .multilineTextAlignment(.center)
@@ -24,19 +24,19 @@ struct Drawer_AboutView: View {
                         .font(.system(size: isPad ? 71 : 29))
                         .foregroundColor(.primary)
 
-                    Text("前開發者們")
+                    Text(LocalizedStringKey("Developer_0"))
                         .font(.system(size: isPad ? 80 : 31, weight: .bold))
                         .foregroundColor(.primary)
                         .underline()
 
                     HStack(spacing: isPad ? 37 : 36) {
-                        memberView(image: "peter", name: "章沛倫", role: "資工系")
-                        memberView(image: "shao", name: "呂紹誠", role: "資工系")
+                        memberView(image: "peter", name: "章沛倫", role: "Information_Engineering")
+                        memberView(image: "shao", name: "呂紹誠", role: "Information_Engineering")
                     }
 
                     HStack(spacing: isPad ? 37 : 36) {
-                        memberView(image: "ken", name: "周楷崴", role: "資工系")
-                        memberView(image: "david", name: "賴宥蓁", role: "資工系")
+                        memberView(image: "ken", name: "周楷崴", role: "Information_Engineering")
+                        memberView(image: "david", name: "賴宥蓁", role: "Information_Engineering")
                     }
                 }
                 .padding(isPad ? 20 : 20) // 內部間距一致
@@ -49,7 +49,7 @@ struct Drawer_AboutView: View {
                 
                 // === Instructor 區塊 ===
                 VStack(spacing: isPad ? 24 : 16) {
-                    Text("指導老師")
+                    Text(LocalizedStringKey("Instructor"))
                         .font(.system(size: isPad ? 90 : 41, weight: .bold))
                         .foregroundColor(Color("Text_Color"))
                         .multilineTextAlignment(.center)
@@ -59,11 +59,11 @@ struct Drawer_AboutView: View {
                         .resizable()
                         .frame(width: isPad ? 390 : 190, height: isPad ? 390 : 190)
                     
-                    Text("黃朝曦")
+                    Text(LocalizedStringKey("DR_ChaoHsi"))
                         .font(.system(size: isPad ? 67 : 23))
                         .foregroundColor(.primary)
                     
-                    Text("資訊工程學系 副教授")
+                    Text(LocalizedStringKey("Information_Engineering_DR"))
                         .font(.system(size: isPad ? 51 : 19))
                         .foregroundColor(.secondary)
                 }
@@ -82,7 +82,7 @@ struct Drawer_AboutView: View {
     }
     
     // 小組成員元件
-    private func memberView(image: String, name: String, role: String) -> some View {
+    private func memberView(image: String, name: String, role: LocalizedStringKey) -> some View {
         VStack(spacing: isPad ? 12 : 8) {
             Image(image)
                 .resizable()
@@ -98,8 +98,4 @@ struct Drawer_AboutView: View {
         }
         .frame(maxWidth: .infinity)
     }
-}
-
-#Preview {
-    Drawer_AboutView()
 }

@@ -25,10 +25,10 @@ struct RootView: View {
                 ClassScheduleView()
                     .environmentObject(appState)
             case .Event_Registration:
-                EventRegistrationView()
+                EventRegistrationTabView()
                     .environmentObject(appState)
             case .Contact_Us:
-                ContactUsView()
+                ContactUsTabView()
                     .environmentObject(appState)
             case .Graduation_Threshold:
                 GraduationThresholdView()

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1050E1852EA240AF00120A06 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1050E1832EA240AF00120A06 /* InfoPlist.strings */; };
 		10702B2C2E9E010500136301 /* PDFViewer in Frameworks */ = {isa = PBXBuildFile; productRef = 10702B2B2E9E010500136301 /* PDFViewer */; };
 		108474CC2E9A8A2000CEB37C /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 108474CB2E9A8A2000CEB37C /* FirebaseDatabase */; };
 		108474CE2E9A8A3600CEB37C /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 108474CD2E9A8A3600CEB37C /* FirebaseMessaging */; };
@@ -18,6 +19,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1050E1842EA240AF00120A06 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = SOURCE_ROOT; };
+		1050E1862EA240C600120A06 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = SOURCE_ROOT; };
 		108474D12E9A94F100CEB37C /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		10A150EE2E8E560200A1592A /* com-niu-csie-edu-app-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "com-niu-csie-edu-app-Info.plist"; sourceTree = SOURCE_ROOT; };
 		10C8A1492E917ED60091B96F /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -115,6 +118,7 @@
 				10702B142E9D0E7F00136301 /* App */,
 				1A66F72D2C88C29400C64130 /* Resources */,
 				1AA990822C8351D200819A69 /* Preview Content */,
+				1050E1832EA240AF00120A06 /* InfoPlist.strings */,
 			);
 			path = com.niu.csie.edu.app;
 			sourceTree = "<group>";
@@ -196,6 +200,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1050E1852EA240AF00120A06 /* InfoPlist.strings in Resources */,
 				1AA990842C8351D200819A69 /* Preview Assets.xcassets in Resources */,
 				1A66F7302C88C31000C64130 /* Localizable.strings in Resources */,
 				108474D22E9A94F100CEB37C /* GoogleService-Info.plist in Resources */,
@@ -216,6 +221,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		1050E1832EA240AF00120A06 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1050E1842EA240AF00120A06 /* en */,
+				1050E1862EA240C600120A06 /* zh-Hant */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
 		1A66F72E2C88C31000C64130 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -281,7 +295,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -339,7 +353,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -361,7 +375,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "com-niu-csie-edu-app-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = NIU_APP_IOS;
+				INFOPLIST_KEY_CFBundleDisplayName = "$(APP_DISPLAY_NAME)";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -373,6 +387,8 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
+				NEW_SETTING = "";
+				NEW_SETTING1 = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "NIU-APP.com-niu-csie-edu-app";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -398,7 +414,7 @@
 				ENABLE_TESTABILITY = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "com-niu-csie-edu-app-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = NIU_APP_IOS;
+				INFOPLIST_KEY_CFBundleDisplayName = "$(APP_DISPLAY_NAME)";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -410,6 +426,8 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
+				NEW_SETTING = "";
+				NEW_SETTING1 = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "NIU-APP.com-niu-csie-edu-app";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

@@ -10,7 +10,10 @@ final class TakeLeaveViewModel: ObservableObject {
     @Published var isWebVisible = false
     
     let webProvider: WebView_Provider
-    private let jsHideElements = "document.getElementById('QTable2').style.display = 'none';"
+    private let jsHideElements = """
+    document.getElementById('QTable2').style.display = 'none';
+    document.querySelector('a[href="JavaScript:showHideQtable();"]').closest('table').style.display = 'none';
+    """
     private let sso = SSOIDSettings.shared
     
     init() {

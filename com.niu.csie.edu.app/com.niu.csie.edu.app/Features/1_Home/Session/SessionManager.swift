@@ -81,7 +81,7 @@ final class SessionManager: ObservableObject {
                     SSOIDSettings.shared.bulkUpdate(
                         EUNI: euni,
                         acade_main: acadeMain,
-                        acade_subject_system: acadeSubject,
+                        acade_subject_system: acadeSubject
                     )
                     
                     // 第 2 段：跳到 Std003.aspx，抓單一 ID 的 href（ccsys）

@@ -48,6 +48,12 @@
 "Achievements" = "Achievements";
 "huh" = "Synopsis";
 "About" = "About";
+"Developer" = "Developer";
+"Developer_0" = "Former developers";
+"Information_Engineering" = "Information Engineering";
+"Instructor" = "Instructor";
+"DR_ChaoHsi" = "Chao Hsi Huang";
+"Information_Engineering_DR" = "Information Engineering's Professor";
 "Settings" = "Settings";
 "Theme" = "Theme:  ";
 "bright" = "Bright Theme";
@@ -57,5 +63,11 @@
 
 "Logout" = "登出";
 
+// 活動報名
+"eventReg_tab_eventsList" = "Events List";
+"eventReg_tab_myApplyEvents" = "Registered Events";
+// 聯絡我們
+"contactus_tab_feedback" = "Feedback";
+"contactus_tab_bugreport" = "BUG Report";
 // 選課系統
 "currently_not_a_course_selection_time" = "not in selection time！";

@@ -3,7 +3,9 @@ import SwiftUI
 
 
 struct TakeLeaveView: View {
+    
     @EnvironmentObject var appState: AppState
+    
     @StateObject private var vm = TakeLeaveViewModel()
     
     var body: some View {
