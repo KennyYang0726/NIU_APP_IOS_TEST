@@ -63,11 +63,27 @@
 
 "Logout" = "登出";
 
+// 成績查詢
+"scoreInquiry_tab_mid_term_results" = "期中成績";
+"scoreInquiry_tab_final_term_results" = "期末成績";
 // 活動報名
 "eventReg_tab_eventsList" = "≡活動報名";
 "eventReg_tab_myApplyEvents" = "✔已報名";
 // 聯絡我們
 "contactus_tab_feedback" = "意見回饋";
 "contactus_tab_bugreport" = "BUG回報";
+"Feedback_text" = "&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;無論是對介面設計有想法，或是須要額外功能，或是想幫助我們持續協助app的 維護/新功能開發，亦或是對app開發感興趣，歡迎向我們回饋您寶貴的想法。若您願意協助app的後續事宜，可以留下您的Mail、Line等聯繫方式，我們將與您聯繫！";
+"WriteSomething" = "寫點什麼吧~~";
+"ContactInfo" = "聯繫方式(選填)";
+"RegisteredSend" = "以記名方式送出";
+"BugReported_text" = "&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;很遺憾，發生臭蟲帶來的壞心情，這份表單可以協助我們修復這個問題。如果您知道如何觸發此BUG發生，請詳細說明，觸發此BUG的流程與條件。如果不清楚如何觸發這個BUG，或者是無預警的出現問題，請大略描述出現的問題時機。再次感謝您，讓我們app持續進步。";
+"Bug_Report_text1" = "標題";
+"Bug_Report_input1" = "bug 類型 (ex:閃退、沒有回應...)";
+"Bug_Report_text2" = "步驟";
+"Bug_Report_input2" = "描述如何重現 bug 的具體步驟";
+"DeviceInfoReport" = "同意傳送設備資訊";
+"Submit" = "送出";
+"EmptyContent" = "內容不能為空";
+"Submit_Successful" = "提交回饋成功";
 // 選課系統
 "currently_not_a_course_selection_time" = "目前非選課時間！";

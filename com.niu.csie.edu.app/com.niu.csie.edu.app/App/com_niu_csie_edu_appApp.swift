@@ -12,14 +12,14 @@ struct com_niu_csie_edu_appApp: App {
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @StateObject private var settings = AppSettings()
-    @StateObject private var session = SessionManager()      // ⬅️ 新增
+    @StateObject private var session = SessionManager()
 
     
     var body: some Scene {
         WindowGroup {
             RootView()
                 .environmentObject(settings)
-                .environmentObject(session)                  // ⬅️ 注入
+                .environmentObject(session)
                 .preferredColorScheme(resolveColorScheme(settings.theme)) // 即時反映設定改變
                 .onAppear {
                     // App 啟動後先執行匿名登入

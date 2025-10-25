@@ -19,7 +19,7 @@ struct RootView: View {
                 EUNIView()
                     .environmentObject(appState)
             case .Score_Inquiry:
-                ScoreInquiryView()
+                ScoreInquiryTabView()
                     .environmentObject(appState)
             case .Class_Schedule:
                 ClassScheduleView()

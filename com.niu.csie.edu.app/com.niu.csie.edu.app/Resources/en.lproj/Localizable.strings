@@ -63,11 +63,27 @@
 
 "Logout" = "登出";
 
+// 成績查詢
+"scoreInquiry_tab_mid_term_results" = "Mid term results";
+"scoreInquiry_tab_final_term_results" = "Final term results";
 // 活動報名
 "eventReg_tab_eventsList" = "Events List";
 "eventReg_tab_myApplyEvents" = "Registered Events";
 // 聯絡我們
 "contactus_tab_feedback" = "Feedback";
 "contactus_tab_bugreport" = "BUG Report";
+"Feedback_text" = "&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Whether you have ideas for interface design, translate, need additional features, or are interested in app development, you are welcome to give us your valuable feedback. If you are willing to assist with the follow-up matters of the app, you can leave your email, Line and other contact information and we will contact you!";
+"WriteSomething" = "Write something~~";
+"ContactInfo" = "Contact Info (optional)";
+"RegisteredSend" = "Send by registered";
+"BugReported_text" = "&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Unfortunate that bugs bring bad feelings, and this form can help us fix the problem. If you know how to trigger this BUG to occur, please explain in detail the process and conditions that trigger this BUG. If don\'t know how to trigger this bug, or if the problem occurs without warning, please briefly describe the time when the problem occurs.";
+"Bug_Report_text1" = "Title";
+"Bug_Report_input1" = "bug type (ex:crash、ANR...)";
+"Bug_Report_text2" = "Steps";
+"Bug_Report_input2" = "Describe specific steps";
+"DeviceInfoReport" = "Send device info";
+"Submit" = "Submit";
+"EmptyContent" = "Content cannot be empty";
+"Submit_Successful" = "Submit Successfully";
 // 選課系統
 "currently_not_a_course_selection_time" = "not in selection time！";

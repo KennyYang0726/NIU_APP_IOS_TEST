@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		104F326C2EACB90000C1B28D /* DeviceKit in Frameworks */ = {isa = PBXBuildFile; productRef = 104F326B2EACB90000C1B28D /* DeviceKit */; };
 		1050E1852EA240AF00120A06 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1050E1832EA240AF00120A06 /* InfoPlist.strings */; };
 		10702B2C2E9E010500136301 /* PDFViewer in Frameworks */ = {isa = PBXBuildFile; productRef = 10702B2B2E9E010500136301 /* PDFViewer */; };
 		108474CC2E9A8A2000CEB37C /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 108474CB2E9A8A2000CEB37C /* FirebaseDatabase */; };
@@ -64,6 +65,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				108474CE2E9A8A3600CEB37C /* FirebaseMessaging in Frameworks */,
+				104F326C2EACB90000C1B28D /* DeviceKit in Frameworks */,
 				10702B2C2E9E010500136301 /* PDFViewer in Frameworks */,
 				108474D02E9A8C7F00CEB37C /* FirebaseAuth in Frameworks */,
 				108474CC2E9A8A2000CEB37C /* FirebaseDatabase in Frameworks */,
@@ -184,6 +186,7 @@
 			packageReferences = (
 				108474C92E9A8A0E00CEB37C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				10702B2A2E9E010500136301 /* XCRemoteSwiftPackageReference "PDFViewer" */,
+				104F326A2EACB90000C1B28D /* XCRemoteSwiftPackageReference "DeviceKit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 1AA9907A2C8351CD00819A69 /* Products */;
@@ -464,6 +467,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		104F326A2EACB90000C1B28D /* XCRemoteSwiftPackageReference "DeviceKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/devicekit/DeviceKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.0;
+			};
+		};
 		10702B2A2E9E010500136301 /* XCRemoteSwiftPackageReference "PDFViewer" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/rajubd49/PDFViewer.git";
@@ -483,6 +494,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		104F326B2EACB90000C1B28D /* DeviceKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 104F326A2EACB90000C1B28D /* XCRemoteSwiftPackageReference "DeviceKit" */;
+			productName = DeviceKit;
+		};
 		10702B2B2E9E010500136301 /* PDFViewer */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 10702B2A2E9E010500136301 /* XCRemoteSwiftPackageReference "PDFViewer" */;
