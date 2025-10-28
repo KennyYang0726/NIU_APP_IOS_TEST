@@ -14,11 +14,11 @@ final class ContactUs_Tab1_ViewModel: ObservableObject {
     @Published var showToast: Bool = false
     // --- WebView 相關 ---
     let webProvider: WebView_Provider
-    // --- 用於處理全域狀態導向 ---
-    weak var appState: AppState?
-    // 新增：AppSettings 參考
+    // --- 全域注射 ---
     private var appSettings: AppSettings?
     private var loginRepo: LoginRepository?
+    // --- 用於處理全域狀態導向 ---
+    weak var appState: AppState?
 
     
     init() {
@@ -26,11 +26,6 @@ final class ContactUs_Tab1_ViewModel: ObservableObject {
             initialURL: "https://forms.gle/VamntNvfUTqyKUb48",
             userAgent: .desktop
         )
-    }
-    
-    // --- 初始化狀態 ---
-    func initializeState() {
-        webProvider.setVisible(true)
     }
     
     // 讓 View 注入 AppSettings 和 LoginRepository

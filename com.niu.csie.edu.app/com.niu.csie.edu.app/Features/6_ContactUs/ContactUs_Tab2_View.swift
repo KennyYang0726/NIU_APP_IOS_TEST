@@ -2,7 +2,7 @@ import SwiftUI
 
 
 // BugReport
-struct ContactUs_Tab2: View {
+struct ContactUs_Tab2_View: View {
     
     @EnvironmentObject var appState: AppState
     @ObservedObject var vm = ContactUs_Tab2_ViewModel()

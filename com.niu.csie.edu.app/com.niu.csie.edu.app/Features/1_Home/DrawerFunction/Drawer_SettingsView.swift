@@ -8,8 +8,6 @@ struct Drawer_SettingsView: View {
     private let isPad = UIDevice.current.userInterfaceIdiom == .pad
     
     var body: some View {
-        // 全域底色
-        Color("Linear").ignoresSafeArea()
         // 自訂「主題選擇區塊」
         VStack {
             Form {
@@ -41,6 +39,7 @@ struct Drawer_SettingsView: View {
             }
             .scrollContentBackground(.hidden)   // 讓 Form 不再有預設底色
             .background(.clear)                 // 可選：確保透明
+            .scrollDisabled(true)
             .frame(maxWidth: .infinity)
             .padding(.horizontal, isPad ? 37 : 19)
         
@@ -59,6 +58,7 @@ struct Drawer_SettingsView: View {
             .foregroundColor(.white)
             .padding(.vertical, isPad ? -899 : -499)
         }
+        .background(Color("Linear").ignoresSafeArea()) // 全域底色
     }
 }
 

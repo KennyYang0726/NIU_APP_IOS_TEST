@@ -19,7 +19,7 @@ struct TakeLeaveView: View {
                 ProgressOverlay(isVisible: $vm.isOverlayVisible, text: vm.overlayText)
             }
             .onAppear {
-                vm.loadInitialPage()
+                vm.InitialSettings()
             }
         }
     }

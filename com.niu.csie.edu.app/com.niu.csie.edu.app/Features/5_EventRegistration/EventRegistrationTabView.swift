@@ -64,8 +64,8 @@ struct EventRegistrationTabView: View {
                 GeometryReader { geometry in
                     let width = geometry.size.width
                     let pages: [AnyView] = [
-                        AnyView(EventRegistration_Tab1(vm: tab1)),
-                        AnyView(EventRegistration_Tab2(vm: tab2))
+                        AnyView(EventRegistration_Tab1_View(vm: tab1)),
+                        AnyView(EventRegistration_Tab2_View(vm: tab2))
                     ]
                     
                     HStack(spacing: 0) {
@@ -102,6 +102,34 @@ struct EventRegistrationTabView: View {
                     .animation(.easeInOut(duration: 0.25), value: viewModel.selectedIndex)
                 }
             }
+            // 活動詳情 Dialog
+            .overlay(
+                Group {
+                    if tab1.showEventDetailDialog, let e = tab1.selectedEventForDetail {
+                        customalertdialog_eventDetail(
+                            title: e.name,
+                            eventID: e.eventSerialID,
+                            eventTime: e.eventTime,
+                            eventLocation: e.eventLocation,
+                            eventDetail: e.eventDetail,
+                            department: e.department,
+                            contactName: e.contactInfoName,
+                            contactTel: e.contactInfoTel,
+                            contactMail: e.contactInfoMail,
+                            link: e.Related_links,
+                            remark: e.Remark,
+                            factorAuth: e.Multi_factor_authentication,
+                            registerTime: e.eventRegisterTime,
+                            okText: "Dialog_OK",
+                            onOK: {
+                                tab1.showEventDetailDialog = false
+                            }
+                        )
+                        .zIndex(10)
+                    }
+                }
+            )
+
         }
     }
 

@@ -21,8 +21,6 @@ struct SubjectSystemView: View {
             .onAppear {
                 // 註冊 alert handler（ViewModel 已自動處理）
                 vm.appState = appState
-                // 載入頁面
-                vm.loadSubjectSystem()
             }
         }
     }

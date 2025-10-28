@@ -25,12 +25,10 @@ struct com_niu_csie_edu_appApp: App {
                     // App 啟動後先執行匿名登入
                     FirebaseAuthManager.shared.signInAnonymously()
                 }
-            // LoginView()
-            // DrawerManagerView()
         }
     }
     
-    //
+    // 傳遞當前設置的主題色
     private func resolveColorScheme(_ theme: AppTheme) -> ColorScheme? {
         switch theme {
             case .default:
@@ -42,3 +40,4 @@ struct com_niu_csie_edu_appApp: App {
         }
     }
 }
+

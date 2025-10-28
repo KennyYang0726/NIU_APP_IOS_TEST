@@ -11,12 +11,6 @@ struct LoginView: View {
     var body: some View {
         let metrics = LayoutMetrics.metrics(for: hSizeClass ?? .compact)
         
-        /*
-        ZStack {
-            // 登入中 prog (注意！放在這裡才是全版面)
-            ProgressOverlay(isVisible: $vm.showOverlay, text: vm.overlayText)
-        }*/
-        
         VStack(spacing: metrics.mainSpacing) {
             
             // Logo

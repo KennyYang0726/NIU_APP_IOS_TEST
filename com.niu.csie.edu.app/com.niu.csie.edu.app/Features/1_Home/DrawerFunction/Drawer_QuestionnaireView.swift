@@ -9,8 +9,6 @@ struct Drawer_QuestionnaireView: View {
         NavigationStack {
             // MARK: - 說明卡片頁面
             ZStack {
-                Color("Linear").ignoresSafeArea()
-
                 VStack {
                     VStack(spacing: isPad ? 24 : 16) {
                         Text(LocalizedStringKey("Satisfaction_Survey_Text"))
@@ -46,6 +44,7 @@ struct Drawer_QuestionnaireView: View {
                     Spacer()
                 }
             }
+            .background(Color("Linear").ignoresSafeArea()) // 全域底色
         }
     }
 }
@@ -65,8 +64,4 @@ struct WebQuestionnairePage: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbarColorScheme(.dark, for: .navigationBar)
     }
-}
-
-#Preview{
-    Drawer_QuestionnaireView()
 }

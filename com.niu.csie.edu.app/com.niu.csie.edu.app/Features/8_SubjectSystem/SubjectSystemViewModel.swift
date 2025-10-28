@@ -20,8 +20,9 @@ final class SubjectSystemViewModel: ObservableObject {
     weak var appState: AppState?
     
     init(appState: AppState? = nil) {
+        let fullURL = "https://ccsys.niu.edu.tw/SSO/" + sso.acade_subject_system
         self.webProvider = WebView_Provider(
-            initialURL: "about:blank",
+            initialURL: fullURL,
             userAgent: .desktop
         )
         self.appState = appState
@@ -41,11 +42,11 @@ final class SubjectSystemViewModel: ObservableObject {
         }
     }
     
-    // --- 載入頁面 ---
-    func loadSubjectSystem() {
-        let fullURL = "https://ccsys.niu.edu.tw/SSO/" + sso.acade_subject_system
-        webProvider.load(url: fullURL)
-    }
+    // --- 初始化狀態 ---
+    /*
+    func InitialSettings() {
+        isWebVisible = false
+    }*/
     
     // --- 顯示畫面（模仿 Android 的 hideProgressOverlay + setVisibility） ---
     private func showPage() {

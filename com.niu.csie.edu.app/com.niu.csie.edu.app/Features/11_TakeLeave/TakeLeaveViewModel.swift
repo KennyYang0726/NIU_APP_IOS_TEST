@@ -17,13 +17,15 @@ final class TakeLeaveViewModel: ObservableObject {
     private let sso = SSOIDSettings.shared
     
     init() {
+        let fullURL = "https://ccsys.niu.edu.tw/SSO/" + sso.acade_main
         self.webProvider = WebView_Provider(
-            initialURL: "about:blank",
+            initialURL: fullURL,
             userAgent: .desktop
         )
         setupCallbacks()
     }
     
+    // --- 綁定 WebView 回呼事件 ---
     private func setupCallbacks() {
         webProvider.onPageFinished = { [weak self] url in
             guard let self = self else { return }
@@ -44,10 +46,9 @@ final class TakeLeaveViewModel: ObservableObject {
         }
     }
     
-    func loadInitialPage() {
+    // --- 初始化狀態 ---
+    func InitialSettings() {
         isWebVisible = false
-        let fullURL = "https://ccsys.niu.edu.tw/SSO/" + sso.acade_main
-        webProvider.load(url: fullURL)
     }
     
     private func handlePageFinished(url: String?) {

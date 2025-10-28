@@ -21,7 +21,7 @@ struct ClassScheduleView: View {
             }
             .onAppear {
                 // 初始化狀態
-                vm.loadInitialPage()
+                vm.InitialSettings()
                 vm.colorScheme = colorScheme
             }
         }

@@ -41,11 +41,6 @@ final class ContactUs_Tab2_ViewModel: ObservableObject {
         )
     }
     
-    // --- 初始化狀態 ---
-    func initializeState() {
-        webProvider.setVisible(true)
-    }
-    
     // 轉譯
     func setTextareaValue(text: String) -> String {
         // 先把文字做 Escape，避免單引號或換行破壞 JS

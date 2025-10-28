@@ -64,8 +64,8 @@ struct ContactUsTabView: View {
                 GeometryReader { geometry in
                     let width = geometry.size.width
                     let pages: [AnyView] = [
-                        AnyView(ContactUs_Tab1(vm: tab1)),
-                        AnyView(ContactUs_Tab2(vm: tab2))
+                        AnyView(ContactUs_Tab1_View(vm: tab1)),
+                        AnyView(ContactUs_Tab2_View(vm: tab2))
                     ]
                     
                     HStack(spacing: 0) {

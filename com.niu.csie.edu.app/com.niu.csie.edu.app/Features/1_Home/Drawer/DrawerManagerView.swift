@@ -58,7 +58,7 @@ struct DrawerManagerView: View {
         case .calendar: Drawer_CalendarView()
         case .questionnaire: Drawer_QuestionnaireView()
         case .achievements: Drawer_AchievementsView(vm: vm)
-        case .huh: Drawer_HuhView(vm: vm)
+        case .huh: Drawer_ZDebugPushView(vm: vm)
         case .about: Drawer_AboutView() // 無互動元件
         case .settings: Drawer_SettingsView()
         case .logout: Drawer_LogoutView(vm: vm)

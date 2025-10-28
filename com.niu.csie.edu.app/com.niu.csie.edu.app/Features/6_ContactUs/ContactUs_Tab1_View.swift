@@ -2,7 +2,7 @@ import SwiftUI
 
 
 // FeedBack
-struct ContactUs_Tab1: View {
+struct ContactUs_Tab1_View: View {
     
     @EnvironmentObject var appSettings: AppSettings
     private let loginRepo = LoginRepository()

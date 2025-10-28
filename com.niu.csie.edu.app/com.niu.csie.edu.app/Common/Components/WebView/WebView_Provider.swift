@@ -138,8 +138,27 @@ class WebView_Provider: ObservableObject {
     public func evaluateJS(_ script: String, completion: ((String?) -> Void)? = nil) {
         webView.evaluateJavaScript(script) { result, error in
             DispatchQueue.main.async {
-                if let err = error {
-                    print("JS evaluate error: \(err.localizedDescription)")
+                if let err = error as NSError? {
+                    var errorMessage = "JS evaluate error:\n"
+                    errorMessage += "- localizedDescription: \(err.localizedDescription)\n"
+                    errorMessage += "- domain: \(err.domain)\n"
+                    errorMessage += "- code: \(err.code)\n"
+
+                    // 嘗試取出 WKError 的類型
+                    if err.domain == WKError.errorDomain,
+                       let wkCode = WKError.Code(rawValue: err.code) {
+                        errorMessage += "- WKError type: \(wkCode)\n"
+                    }
+
+                    // userInfo 有時會包含 Exception 資訊（尤其 SyntaxError）
+                    if !err.userInfo.isEmpty {
+                        errorMessage += "- userInfo:\n"
+                        for (key, value) in err.userInfo {
+                            errorMessage += "    \(key): \(value)\n"
+                        }
+                    }
+
+                    print(errorMessage)
                     completion?(nil)
                 } else if let val = result {
                     completion?("\(val)")

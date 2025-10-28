@@ -64,8 +64,8 @@ struct ScoreInquiryTabView: View {
                 GeometryReader { geometry in
                     let width = geometry.size.width
                     let pages: [AnyView] = [
-                        AnyView(ScoreInquiry_Tab1(vm: tab1)),
-                        AnyView(ScoreInquiry_Tab2(vm: tab2))
+                        AnyView(ScoreInquiry_Tab1_View(vm: tab1)),
+                        AnyView(ScoreInquiry_Tab2_View(vm: tab2))
                     ]
                     
                     HStack(spacing: 0) {
