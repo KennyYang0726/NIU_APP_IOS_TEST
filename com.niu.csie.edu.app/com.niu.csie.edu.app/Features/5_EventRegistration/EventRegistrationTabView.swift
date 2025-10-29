@@ -105,7 +105,28 @@ struct EventRegistrationTabView: View {
             // 活動詳情 Dialog
             .overlay(
                 Group {
-                    if tab1.showEventDetailDialog, let e = tab1.selectedEventForDetail {
+                    if tab1.showEventDetailDialog, let e =
+                        tab1.selectedEventForDetail {
+                            customalertdialog_eventDetail(
+                                title: e.name,
+                                eventID: e.eventSerialID,
+                                eventTime: e.eventTime,
+                                eventLocation: e.eventLocation,
+                                eventDetail: e.eventDetail,
+                                department: e.department,
+                                contactName: e.contactInfoName,
+                                contactTel: e.contactInfoTel,
+                                contactMail: e.contactInfoMail,
+                                link: e.Related_links,
+                                remark: e.Remark,
+                                factorAuth: e.Multi_factor_authentication,
+                                registerTime: e.eventRegisterTime,
+                                okText: "Dialog_OK",
+                                onOK: {
+                                    tab1.showEventDetailDialog = false
+                                }
+                            )
+                    } else if tab2.showEventDetailDialog, let e = tab2.selectedEventForDetail {
                         customalertdialog_eventDetail(
                             title: e.name,
                             eventID: e.eventSerialID,
@@ -122,14 +143,13 @@ struct EventRegistrationTabView: View {
                             registerTime: e.eventRegisterTime,
                             okText: "Dialog_OK",
                             onOK: {
-                                tab1.showEventDetailDialog = false
+                                tab2.showEventDetailDialog = false
                             }
                         )
-                        .zIndex(10)
                     }
                 }
+                .zIndex(10)
             )
-
         }
     }
 

@@ -16,10 +16,20 @@ struct EventRegistration_Tab1_View: View {
                             EventRegistration_Tab1_ListView(vm: itemVM, onDetailTapped: { e in
                                 vm.showEventDetailDialog = true
                                 vm.selectedEventForDetail = e
+                                }, onRegisterTapped: { e in
+                                vm.isPostHandled = true
+                                vm.RegisterEvent(EventID: e.eventSerialID)
                                 })
                         }
                     }
                     .padding(.top, 10)
+                }
+                .toast(isPresented: $vm.showToast) {
+                    Text(LocalizedStringKey("Event_Register_Success"))
+                        .foregroundColor(.white)
+                        .padding()
+                        .background(Color.black.opacity(0.8))
+                        .cornerRadius(12)
                 }
                 // 移出畫面外的 Webview
                 ZStack {

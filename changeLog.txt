@@ -1,6 +1,6 @@
 1. Tab+ViewPager Layout 實現
 2. DATABASE完成9成，剩下讀取EXAMPLE和寫入FUNC
-3. 
+3. 活動報名 快做完了
 4. 
 5. 
 

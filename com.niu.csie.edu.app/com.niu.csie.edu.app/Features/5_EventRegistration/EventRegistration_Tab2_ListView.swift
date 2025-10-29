@@ -1,11 +1,12 @@
 import SwiftUI
 
 
-
-struct EventData: Identifiable, Codable {
-    var id: String { eventSerialID }
+// MARK: - Tab2 專用的資料模型
+struct EventData_Apply: Identifiable, Codable {
+    var id: String { eventSerialID } // 給 ForEach 用
     let name: String
     let department: String
+    let state: String
     let event_state: String
     let eventSerialID: String
     let eventTime: String
@@ -17,17 +18,16 @@ struct EventData: Identifiable, Codable {
     let contactInfoMail: String
     let Related_links: String
     let Multi_factor_authentication: String
-    let eventPeople: String
     let Remark: String
 }
 
 
-struct EventRegistration_Tab1_ListView: View {
+struct EventRegistration_Tab2_ListView: View {
     
-    @ObservedObject var vm: EventRegistration_Tab1_ListViewModel
+    @ObservedObject var vm: EventRegistration_Tab2_ListViewModel
     // 註冊 callback
-    var onDetailTapped: ((EventData) -> Void)? = nil
-    var onRegisterTapped: ((EventData) -> Void)? = nil
+    var onDetailTapped: ((EventData_Apply) -> Void)? = nil
+    var onModdingInfoTapped: ((EventData_Apply) -> Void)? = nil
     
     private let isPad = UIDevice.current.userInterfaceIdiom == .pad
 
@@ -75,9 +75,7 @@ struct EventRegistration_Tab1_ListView: View {
                         EventInfoRow(icon: "info.circle.fill", label: "Event_ID", value: vm.event.eventSerialID)
                         EventInfoRow(icon: "calendar", label: "Event_Time", value: vm.event.eventTime)
                         EventInfoRow(icon: "mappin.and.ellipse", label: "Event_Location", value: vm.event.eventLocation)
-                        EventInfoRow(icon: "clock", label: "Event_RegisterTime", value: vm.event.eventRegisterTime)
-                        EventInfoRow(icon: "checkmark.seal.fill", label: "Event_Type", value: vm.event.Multi_factor_authentication)
-                        EventInfoRow(icon: "person.2.fill", label: "Event_People", value: vm.event.eventPeople)
+                        EventInfoRow(icon: "person.2.fill", label: "Event_Reg_State", value: vm.event.state)
                         // 底部按鈕列
                         HStack(spacing: isPad ? 83 : 24) {
                             Button {
@@ -92,7 +90,7 @@ struct EventRegistration_Tab1_ListView: View {
 
                             if vm.event.event_state == "報名中" {
                                 Button {
-                                    onRegisterTapped?(vm.event) // 呼叫父層 callback
+                                    onModdingInfoTapped?(vm.event) // 呼叫父層 callback
                                 } label: {
                                     Text("Event_BTN_Register")
                                         .frame(width: isPad ? 159 : 90, height: isPad ? 53 : 37)

@@ -14,8 +14,12 @@ final class EventRegistration_Tab1_ViewModel: ObservableObject {
     @Published var events: [EventData] = []
     
     @Published var showEventDetailDialog: Bool = false
-    // 選中的EventData資訊
+    @Published var isPostHandled: Bool = false // 新增標誌位
+    // 新增 toast 控制
+    @Published var showToast: Bool = false
+    // 選中的 EventData 資訊
     @Published var selectedEventForDetail: EventData?
+    private var selectedEventID: String? // 儲存點擊的ID，否則無法傳到 setupCallbacks
     
     // --- WebView 相關 ---
     let webProvider: WebView_Provider
@@ -162,10 +166,68 @@ final class EventRegistration_Tab1_ViewModel: ObservableObject {
         case "https://ccsys.niu.edu.tw/MvcTeam/Act":
             refresh()
             // isOverlayVisible = false
-        default:
+        default: // 進入選擇的活動，準備報名
+            if (isPostHandled) {
+                webProvider.evaluateJS("document.querySelector('[name=\"__RequestVerificationToken\"]').value") { [weak self] token in
+                    guard let self = self else { return }
+                    handleRegisterEvent(token: token!, EventID: selectedEventID!, PostURL: url!)
+                }
+            }
             break
         }
     }
+    
+    func RegisterEvent(EventID: String) {
+        isOverlayVisible = true
+        isListVisible = false
+        selectedEventID = EventID
+        webProvider.load(url: "https://ccsys.niu.edu.tw/MvcTeam/Act/Apply/"+EventID)
+    }
+    
+    private func handleRegisterEvent(token: String, EventID: String, PostURL: String) {
+        
+        let parameters = [
+            "__RequestVerificationToken": token,
+            "id": EventID,
+            "action": "我要報名"
+        ]
+                
+        let bodyString = parameters.map { "\($0.key)=\($0.value)" }
+            .joined(separator: "&")
+        guard let postData = bodyString.data(using: .utf8),
+                let url = URL(string: PostURL) else { return }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = postData
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        
+        webProvider.loadPost(url: PostURL, body: parameters)
+        checkRegistrationStatus()
+    }
+    
+    private func checkRegistrationStatus() {
+        isPostHandled = false // Post 完成，先把標誌位改回 false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            self.webProvider.evaluateJS("""
+                (function() {
+                    var h1Element = document.querySelector('h1.text-danger.text-shadow');
+                    return h1Element ? h1Element.innerText.includes('已報名') : false;
+                })();
+            """) {  [weak self] result in
+                // 這裡一定要用 ! ，否則會有 Optional
+                // 和 Android 不同，這裡true是"1" false是"0"
+                guard let self = self else { return }
+
+                if result! == "1" {
+                    showToast = true
+                    webProvider.load(url: "https://ccsys.niu.edu.tw/MvcTeam/Act")
+                } else {
+                    checkRegistrationStatus()
+                }
+            }
+        }
+    }
+    
     
     // --- 顯示畫面（模仿 Android 的 hideProgressOverlay + setVisibility） ---
     private func showPage() {

@@ -83,13 +83,45 @@ struct customalertdialog_eventDetail: View {
                                         Image(systemName: "envelope.fill")
                                         Text(contactMail)
                                             .font(.system(size: isPad ? 23 : 14))
+                                            .foregroundColor(.blue) // 讓使用者知道可點
+                                            .underline()
+                                            .onTapGesture {
+                                                let subject = "【活動詢問】\(title)"
+                                                let body = "您好，我想詢問關於活動「\(title)」的相關事項。"
+                                                if let encodedSubject = subject.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+                                                    let encodedBody = body.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+                                                    let url = URL(string: "mailto:\(contactMail)?subject=\(encodedSubject)&body=\(encodedBody)") {
+                                                    if UIApplication.shared.canOpenURL(url) {
+                                                        UIApplication.shared.open(url)
+                                                    } else {
+                                                        print("無法開啟郵件應用程式")
+                                                    }
+                                                } else {
+                                                    print("郵件 URL 編碼失敗")
+                                                }
+                                            }
                                     }
                                 }
                                 .font(.system(size: isPad ? 19 : 13))
                             }
                             Divider().background(Color("Text_Color"))
 
-                            TableRow("Event_Link") { Text(link)}
+                            TableRow("Event_Link") {
+                                Text(link)
+                                    .foregroundColor(.blue) // 讓使用者知道可點
+                                    .underline()
+                                    .onTapGesture {
+                                        if let url = URL(string: link.trimmingCharacters(in: .whitespacesAndNewlines)) {
+                                            if UIApplication.shared.canOpenURL(url) {
+                                                UIApplication.shared.open(url)
+                                            } else {
+                                                print("無法開啟瀏覽器，URL：\(link)")
+                                            }
+                                        } else {
+                                            print("URL 格式錯誤：\(link)")
+                                        }
+                                    }
+                            }
                             Divider().background(Color("Text_Color"))
 
                             TableRow("Event_Remark") {

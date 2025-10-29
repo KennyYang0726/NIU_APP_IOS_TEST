@@ -11,6 +11,16 @@ final class EventRegistration_Tab2_ViewModel: ObservableObject {
     @Published var isOverlayVisible = true
     @Published var overlayText: LocalizedStringKey = "loading"
     
+    @Published var events: [EventData_Apply] = []
+    
+    @Published var showEventDetailDialog: Bool = false
+    @Published var isPostHandled: Bool = false // 新增標誌位
+    // 新增 toast 控制
+    @Published var showToast: Bool = false
+    // 選中的 EventData 資訊
+    @Published var selectedEventForDetail: EventData_Apply?
+    private var selectedEventID: String? // 儲存點擊的ID，否則無法傳到 setupCallbacks
+    
     // --- WebView 相關 ---
     let webProvider: WebView_Provider
     // --- 全域注射 ---
@@ -29,8 +39,7 @@ final class EventRegistration_Tab2_ViewModel: ObservableObject {
                 let state = row_state.querySelector('.text-danger.text-shadow').innerText.split('：')[1].trim(); // 報名狀態 (正取/候補/現場)
                 let event_state = row.querySelector('.btn.btn-danger').innerText.trim(); // 活動狀態
                 let eventSerialID = row.querySelector('p').innerText.split('：')[1].split(' ')[0].trim(); // 活動編號
-                let eventTime = row.querySelector('.fa-calendar').parentElement.innerText.replace(/\\s+/g,'').replace('~','~\\n').trim(); // 活動時間
-                let eventTime_formatted = eventTime.replace('~','起')+'止'.trim(); // 活動時間 格式化版
+                let eventTime = row.querySelector('.fa-calendar').parentElement.innerText.replace(/\\s+/g,'').replace('~','起\\n')+'止'.trim(); // 活動時間
                 let eventLocation = row.querySelector('.fa-map-marker').parentElement.innerText.trim(); // 活動地點
                 let eventDetail = dialog.querySelectorAll('tr')[3].querySelectorAll('td')[1].textContent.replace(/\\s+/g,'').replace('<br>','\\n').replace('\"','').trim(); // 活動說明
                 let contactInfoText = dialog.querySelectorAll('tr')[5].querySelectorAll('td')[1].innerHTML; // 聯絡資訊(3項)
@@ -42,12 +51,11 @@ final class EventRegistration_Tab2_ViewModel: ObservableObject {
                 let Multi_factor_authentication = dialog.querySelectorAll('tr')[8].querySelectorAll('td')[1].textContent.replace(/\\s+/g,'').replace('<br>','\\n').replace('\"','').trim(); // 多元認證
                 let eventRegisterTime = dialog.querySelectorAll('tr')[9].querySelectorAll('td')[1].textContent.replace(/\\s+/g,'').replace('~','~\\n').trim(); // 報名時間
                 // let eventPeople = row.querySelector('.fa-user-plus').parentElement.innerText.replace(/\\s+/g,'').replace('，','人\\n')+'人'.trim(); // 報名人數
-                data[i] = {name, department, state, event_state, eventSerialID, eventTime, eventTime_formatted, eventLocation, eventDetail, contactInfoName: contactInfos[0], contactInfoTel: contactInfos[1], contactInfoMail: contactInfos[2], Related_links, Remark, Multi_factor_authentication, eventRegisterTime};
+                data[i] = {name, department, state, event_state, eventSerialID, eventTime, eventLocation, eventDetail, contactInfoName: contactInfos[0], contactInfoTel: contactInfos[1], contactInfoMail: contactInfos[2], Related_links, Remark, Multi_factor_authentication, eventRegisterTime};
             }
             return JSON.stringify(data);
         })();
         """
-    
     
     init() {
         let ccsysURL = sso.ccsys
@@ -57,6 +65,74 @@ final class EventRegistration_Tab2_ViewModel: ObservableObject {
             userAgent: .desktop
         )
         setupCallbacks()
+    }
+    
+    // 重新加載列表，無論是剛開始或是取消報名
+    private func refresh() {
+        webProvider.evaluateJS(jsGetData) { [weak self] result in
+            guard let self = self else { return }
+            if let jsonString = result {
+                do {
+                    // 將字串轉成 Data
+                    let jsonData = jsonString.data(using: .utf8)!
+                    
+                    // 嘗試解析成陣列（對應 JSONArray）
+                    if let jsonArray = try JSONSerialization.jsonObject(with: jsonData) as? [[String: Any]] {
+                        let decodedEvents = jsonArray.compactMap { dict -> EventData_Apply? in
+                            
+                            guard
+                                let name = dict["name"] as? String,
+                                let department = dict["department"] as? String,
+                                let state = dict["state"] as? String, // 正/備取
+                                let event_state = dict["event_state"] as? String, // 活動已結束, 報名截止...
+                                let eventSerialID = dict["eventSerialID"] as? String,
+                                let eventTime = dict["eventTime"] as? String,
+                                let eventLocation = dict["eventLocation"] as? String,
+                                let eventRegisterTime = dict["eventRegisterTime"] as? String,
+                                let eventDetail = dict["eventDetail"] as? String,
+                                let contactInfoName = dict["contactInfoName"] as? String,
+                                let contactInfoTel = dict["contactInfoTel"] as? String,
+                                let contactInfoMail = dict["contactInfoMail"] as? String,
+                                let Related_links = dict["Related_links"] as? String,
+                                let Remark = dict["Remark"] as? String,
+                                let Multi_factor_authentication = dict["Multi_factor_authentication"] as? String
+                                
+                            else { return nil }
+
+                            return EventData_Apply(
+                                name: name,
+                                department: department,
+                                state: state,
+                                event_state: event_state,
+                                eventSerialID: eventSerialID,
+                                eventTime: eventTime,
+                                eventLocation: eventLocation,
+                                eventRegisterTime: eventRegisterTime,
+                                eventDetail: eventDetail,
+                                contactInfoName: contactInfoName,
+                                contactInfoTel: contactInfoTel,
+                                contactInfoMail: contactInfoMail,
+                                Related_links: Related_links,
+                                Multi_factor_authentication: Multi_factor_authentication,
+                                Remark: Remark
+                            )
+                        }
+
+                        // 更新畫面
+                        DispatchQueue.main.async {
+                            self.events = decodedEvents
+                        }
+                    }
+
+
+                } catch {
+                    print("❌ JSON parse error: \(error.localizedDescription)")
+                }
+            } else {
+                print("⚠️ evaluateJS 無法轉換為字串結果")
+            }
+            self.showPage()
+        }
     }
     
     // --- 綁定 WebView 回呼事件 ---
@@ -84,11 +160,8 @@ final class EventRegistration_Tab2_ViewModel: ObservableObject {
         case "https://ccsys.niu.edu.tw/MvcTeam/Act":
             webProvider.load(url: "https://ccsys.niu.edu.tw/MvcTeam/Act/ApplyMe")
         case "https://ccsys.niu.edu.tw/MvcTeam/Act/ApplyMe":
-            isOverlayVisible = false
-            /*
-            webProvider.evaluateJS(jsHideElements) { [weak self] _ in
-                self?.showPage()
-            }*/
+            refresh()
+            // isOverlayVisible = false
         default:
             break
         }

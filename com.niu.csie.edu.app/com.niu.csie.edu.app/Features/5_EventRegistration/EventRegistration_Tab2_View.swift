@@ -8,13 +8,41 @@ struct EventRegistration_Tab2_View: View {
 
     var body: some View {
         VStack {
-            WebViewContainer(webView: vm.webProvider.webView)
-                .ignoresSafeArea(edges: .bottom)
-            /*
-            Text("Tab 02")
-                .font(.largeTitle)
-                .bold()
-            Spacer()*/
+            ZStack {
+                ScrollView {
+                    LazyVStack(spacing: 8) {
+                        ForEach(vm.events, id: \.id) { event in
+                            EventRegistration_Tab2_ListView(
+                                vm: EventRegistration_Tab2_ListViewModel(event: event),
+                                onDetailTapped: { e in
+                                    vm.showEventDetailDialog = true
+                                    vm.selectedEventForDetail = e
+                                },
+                                onModdingInfoTapped: { e in
+                                    vm.isPostHandled = true
+                                    /*
+                                    vm.RegisterEvent(EventID: e.eventSerialID)*/
+                                }
+                            )
+                        }
+
+                    }
+                    .padding(.top, 10)
+                }
+                .toast(isPresented: $vm.showToast) {
+                    Text(LocalizedStringKey("Event_Register_Success"))
+                        .foregroundColor(.white)
+                        .padding()
+                        .background(Color.black.opacity(0.8))
+                        .cornerRadius(12)
+                }
+                // 移出畫面外的 Webview
+                ZStack {
+                    WebViewContainer(webView: vm.webProvider.webView)
+                        .frame(maxWidth: 100, maxHeight: 100)
+                        .offset(x: UIScreen.main.bounds.width * 2)
+                }
+            }
         }
         // 加載中 prog (注意！放在這裡才是全版面)
         .overlay(

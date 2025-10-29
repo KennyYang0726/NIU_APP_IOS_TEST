@@ -89,6 +89,7 @@
 "Event_factor_authentication" = "多元認證";
 "Event_Register_Success" = "報名成功";
 "eventReg_tab_myApplyEvents" = "✔已報名";
+"Event_Reg_State" = "報名狀態";
 "Event_ModInfo" = "修改資料/取消報名";
 "Event_ModInfo_role" = "報名身分";
 "Event_ModInfo_class" = "班級";
