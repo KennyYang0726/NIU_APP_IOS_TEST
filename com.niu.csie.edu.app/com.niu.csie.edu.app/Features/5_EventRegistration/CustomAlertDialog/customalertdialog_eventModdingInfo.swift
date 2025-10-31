@@ -4,8 +4,10 @@ import SwiftUI
 
 // MARK: - 單選選項列舉
 enum ModRadio1: String, CaseIterable, Identifiable {
-    case r1_1, r1_2, r1_3
-    var id: String { rawValue }
+    case r1_1 = "1"
+    case r1_2 = "2"
+    case r1_3 = "3"
+    var id: String { self.rawValue }
     var title: LocalizedStringKey { // 第一組三選一 (用餐選項)
         switch self {
         case .r1_1: return "Event_ModInfo_Radio1_1"
@@ -16,8 +18,9 @@ enum ModRadio1: String, CaseIterable, Identifiable {
 }
 
 enum ModRadio2: String, CaseIterable, Identifiable {
-    case r2_1, r2_2
-    var id: String { rawValue }
+    case r2_1 = "1"
+    case r2_2 = "2"
+    var id: String { self.rawValue }
     var title: LocalizedStringKey { // 第二組二選一 (參與證明)
         switch self {
         case .r2_1: return "Event_ModInfo_Radio2_1"
@@ -34,15 +37,21 @@ struct customalertdialog_eventModdingInfo: View {
     let klass: String
     let studentNo: String
     let name: String
+    
+    // 傳入初始值，而不是 Binding
+    let initialTel: String
+    let initialMail: String
+    let initialRemark: String
+    let initialselectedFood: String
+    let initialSelectedProof: String
 
-    // 可編輯欄位
-    @Binding var tel: String
-    @Binding var mail: String
-    @Binding var remark: String
-
+    // Dialog 內部管理可編輯狀態
+    @State private var tel: String = ""
+    @State private var mail: String = ""
+    @State private var remark: String = ""
     // 單選按鈕
-    @State var radio1: ModRadio1 = .r1_1
-    @State var radio2: ModRadio2 = .r2_1
+    @State private var radio1: ModRadio1 = .r1_1
+    @State private var radio2: ModRadio2 = .r2_1
 
     // 動作
     let onCancel: () -> Void
@@ -50,6 +59,39 @@ struct customalertdialog_eventModdingInfo: View {
 
     @Environment(\.colorScheme) private var scheme
     private let isPad = UIDevice.current.userInterfaceIdiom == .pad
+    
+
+    init(role: String,
+         klass: String,
+         studentNo: String,
+         name: String,
+         initialTel: String,
+         initialMail: String,
+         initialRemark: String,
+         initialselectedFood: String,
+         initialSelectedProof: String,
+         onCancel: @escaping () -> Void,
+         onSave: @escaping (_ tel: String, _ mail: String, _ remark: String, _ radio1: ModRadio1, _ radio2: ModRadio2) -> Void) {
+            self.role = role
+            self.klass = klass
+            self.studentNo = studentNo
+            self.name = name
+            self.initialTel = initialTel
+            self.initialMail = initialMail
+            self.initialRemark = initialRemark
+            self.initialselectedFood = initialselectedFood
+            self.initialSelectedProof = initialSelectedProof
+            self.onCancel = onCancel
+            self.onSave = onSave
+
+            // 初始化 State
+            _tel = State(initialValue: initialTel)
+            _mail = State(initialValue: initialMail)
+            _remark = State(initialValue: initialRemark)
+            _radio1 = State(initialValue: ModRadio1(rawValue: initialselectedFood) ?? .r1_1)
+            _radio2 = State(initialValue: ModRadio2(rawValue: initialSelectedProof) ?? .r2_1)
+         }
+
 
     var body: some View {
         let P = DialogPalette(scheme)
@@ -65,6 +107,7 @@ struct customalertdialog_eventModdingInfo: View {
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, isPad ? 14 : 10)
+                    .padding(.horizontal, isPad ? 11 : 7)
                     .background(P.titleBG)
                     .clipShape(RoundedCornerShape(radius: isPad ? 18 : 12, corners: [.topLeft, .topRight]))
 
@@ -164,7 +207,7 @@ struct customalertdialog_eventModdingInfo: View {
                                 .font(.system(size: isPad ? 23 : 14))
                                 .padding(isPad ? 17 : 11)
                         }
-                        .buttonStyle(DialogButtonStyle(bg: Color("Text_Color"), fg: .white))
+                        .buttonStyle(DialogButtonStyle(bg: Color(hex:"#942320"), fg: .white))
 
                         Button {
                             onSave(tel, mail, remark, radio1, radio2)
@@ -217,9 +260,11 @@ private struct RadioButton: View {
         klass: "資訊工程所",
         studentNo: "B12345678",
         name: "王小明",
-        tel: .constant("0912345678"),
-        mail: .constant("test@mail.com"),
-        remark: .constant("這是備註"),
+        initialTel: "0912345678",
+        initialMail: "test@mail.com",
+        initialRemark: "這是備註",
+        initialselectedFood: "1",
+        initialSelectedProof: "2",
         onCancel: {},
         onSave: { _,_,_,_,_ in }
     )

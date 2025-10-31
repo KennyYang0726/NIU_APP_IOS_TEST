@@ -12,6 +12,97 @@ struct EventRegistrationTabView: View {
     @StateObject private var tab2 = EventRegistration_Tab2_ViewModel()
     @Namespace private var animation
     @GestureState private var dragTranslation: CGFloat = 0
+   
+    // 把 overlay 區塊抽成一個 computed property
+    @ViewBuilder
+    var overlayDialog: some View {
+        if tab1.showEventDetailDialog, let e = tab1.selectedEventForDetail {
+            customalertdialog_eventDetail(
+                title: e.name,
+                eventID: e.eventSerialID,
+                eventTime: e.eventTime,
+                eventLocation: e.eventLocation,
+                eventDetail: e.eventDetail,
+                department: e.department,
+                contactName: e.contactInfoName,
+                contactTel: e.contactInfoTel,
+                contactMail: e.contactInfoMail,
+                link: e.Related_links,
+                remark: e.Remark,
+                factorAuth: e.Multi_factor_authentication,
+                registerTime: e.eventRegisterTime,
+                okText: "Dialog_OK",
+                onOK: {
+                    tab1.showEventDetailDialog = false
+                }
+            )
+        } else if tab2.showEventDetailDialog, let e = tab2.selectedEventForDetail {
+            customalertdialog_eventDetail(
+                title: e.name,
+                eventID: e.eventSerialID,
+                eventTime: e.eventTime,
+                eventLocation: e.eventLocation,
+                eventDetail: e.eventDetail,
+                department: e.department,
+                contactName: e.contactInfoName,
+                contactTel: e.contactInfoTel,
+                contactMail: e.contactInfoMail,
+                link: e.Related_links,
+                remark: e.Remark,
+                factorAuth: e.Multi_factor_authentication,
+                registerTime: e.eventRegisterTime,
+                okText: "Dialog_OK",
+                onOK: {
+                    tab2.showEventDetailDialog = false
+                }
+            )
+        } else if tab2.showModdingEventInfoDialog, let info = tab2.selectedEventForModdingInfo {
+            customalertdialog_eventModdingInfo(
+                role: info.role,
+                klass: info.classes,
+                studentNo: info.schnum,
+                name: info.name,
+                initialTel: info.Tel,
+                initialMail: info.Mail,
+                initialRemark: info.Remark,
+                initialselectedFood: info.selectedFood,
+                initialSelectedProof: info.selectedProof,
+                onCancel: {
+                    tab2.showModdingEventInfoDialog = false
+                    tab2.isPostHandled = true // 開始 post
+                    // 發送 取消報名 的 post
+                    tab2.HandlePost(
+                        EventID: tab2.selectedEventID!,
+                        requestVerificationToken: info.RequestVerificationToken,
+                        signID: info.SignId,
+                        tel: "Tel",
+                        mail: "Mail",
+                        remark: "Remark",
+                        food: "1",
+                        proof: "1",
+                        actions: "確定取消"
+                    )
+                },
+                onSave: { tel,mail,remark,radio1,radio2 in
+                    tab2.showModdingEventInfoDialog = false
+                    tab2.isPostHandled = true // 開始 post
+                    // 發送 儲存修改 的 post
+                    tab2.HandlePost(
+                        EventID: tab2.selectedEventID!,
+                        requestVerificationToken: info.RequestVerificationToken,
+                        signID: info.SignId,
+                        tel: tel,
+                        mail: mail,
+                        remark: remark,
+                        food: radio1.rawValue,
+                        proof: radio2.rawValue,
+                        actions: "儲存修改"
+                    )
+                }
+            )
+        }
+    }
+
     
     private let isPad = UIDevice.current.userInterfaceIdiom == .pad
 
@@ -102,54 +193,11 @@ struct EventRegistrationTabView: View {
                     .animation(.easeInOut(duration: 0.25), value: viewModel.selectedIndex)
                 }
             }
-            // 活動詳情 Dialog
-            .overlay(
-                Group {
-                    if tab1.showEventDetailDialog, let e =
-                        tab1.selectedEventForDetail {
-                            customalertdialog_eventDetail(
-                                title: e.name,
-                                eventID: e.eventSerialID,
-                                eventTime: e.eventTime,
-                                eventLocation: e.eventLocation,
-                                eventDetail: e.eventDetail,
-                                department: e.department,
-                                contactName: e.contactInfoName,
-                                contactTel: e.contactInfoTel,
-                                contactMail: e.contactInfoMail,
-                                link: e.Related_links,
-                                remark: e.Remark,
-                                factorAuth: e.Multi_factor_authentication,
-                                registerTime: e.eventRegisterTime,
-                                okText: "Dialog_OK",
-                                onOK: {
-                                    tab1.showEventDetailDialog = false
-                                }
-                            )
-                    } else if tab2.showEventDetailDialog, let e = tab2.selectedEventForDetail {
-                        customalertdialog_eventDetail(
-                            title: e.name,
-                            eventID: e.eventSerialID,
-                            eventTime: e.eventTime,
-                            eventLocation: e.eventLocation,
-                            eventDetail: e.eventDetail,
-                            department: e.department,
-                            contactName: e.contactInfoName,
-                            contactTel: e.contactInfoTel,
-                            contactMail: e.contactInfoMail,
-                            link: e.Related_links,
-                            remark: e.Remark,
-                            factorAuth: e.Multi_factor_authentication,
-                            registerTime: e.eventRegisterTime,
-                            okText: "Dialog_OK",
-                            onOK: {
-                                tab2.showEventDetailDialog = false
-                            }
-                        )
-                    }
-                }
-                .zIndex(10)
-            )
+            // 活動詳情 Dialog & 修改／取消 報名
+            .overlay(alignment: .center) {
+                overlayDialog
+            }
+            .zIndex(10)
         }
     }
 
@@ -165,3 +213,4 @@ struct EventRegistrationTabView: View {
         return interpolatedX
     }
 }
+

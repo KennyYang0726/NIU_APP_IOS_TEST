@@ -15,18 +15,23 @@ final class EventRegistration_Tab2_ViewModel: ObservableObject {
     
     @Published var showEventDetailDialog: Bool = false
     @Published var isPostHandled: Bool = false // 新增標誌位
+    @Published var showModdingEventInfoDialog: Bool = false
+    
     // 新增 toast 控制
     @Published var showToast: Bool = false
+    @Published var toastMessage: LocalizedStringKey = ""
     // 選中的 EventData 資訊
     @Published var selectedEventForDetail: EventData_Apply?
-    private var selectedEventID: String? // 儲存點擊的ID，否則無法傳到 setupCallbacks
+    // 傳入 修改資料頁面 資訊 (dict)
+    @Published var selectedEventForModdingInfo: EventInfo?
+    var selectedEventID: String? // 儲存點擊的ID，否則無法傳到 setupCallbacks
     
     // --- WebView 相關 ---
     let webProvider: WebView_Provider
     // --- 全域注射 ---
     private let sso = SSOIDSettings.shared
     // --- JS ---
-    let jsGetData: String = """
+    private let jsGetData: String = """
         (function() { 
             var data = []; 
             var count = document.querySelector('.col-md-11.col-md-offset-1.col-sm-10.col-xs-12.col-xs-offset-0').querySelectorAll('.row.enr-list-sec').length;
@@ -57,6 +62,41 @@ final class EventRegistration_Tab2_ViewModel: ObservableObject {
         })();
         """
     
+    private let getInfo = """
+    (function() {
+        let RequestVerificationToken = document.querySelector('[name="__RequestVerificationToken"]').value;
+        let SignId = document.getElementById('SignId').value;
+        let role = document.querySelectorAll('.col-xs-8')[0].innerText.trim();
+        let classes = document.querySelectorAll('.col-xs-8')[1].innerText.trim();
+        let schnum = document.querySelectorAll('.col-xs-8')[2].innerText.trim();
+        let name = document.querySelectorAll('.col-xs-8')[3].innerText.trim();
+        let Tel = document.getElementById('SignTEL').value.toString();
+        let Mail = document.getElementById('SignEmail').value;
+        let Remark = document.getElementById('SignMemo').value;
+        let selectedFood = document.querySelector('input[name="Food"]:checked').value;
+        var selectedProof = document.querySelector('input[name="Proof"]:checked').value;
+        // 處理選擇第三項 公務人員時數
+        if (selectedProof == "3") {
+            selectedProof = "2"; // 需要證明
+        }
+        let result = {
+            'RequestVerificationToken': RequestVerificationToken,
+            'SignId': SignId,
+            'role': role,
+            'classes': classes,
+            'schnum': schnum,
+            'name': name,
+            'Tel': String(Tel),
+            'Mail': Mail,
+            'selectedFood': selectedFood,
+            'selectedProof': selectedProof,
+            'Remark': Remark
+        };
+        return JSON.stringify(result);
+    })();
+    """
+
+    
     init() {
         let ccsysURL = sso.ccsys
         // 初始化 WebView
@@ -64,6 +104,16 @@ final class EventRegistration_Tab2_ViewModel: ObservableObject {
             initialURL: "https://ccsys.niu.edu.tw/SSO/" + ccsysURL,
             userAgent: .desktop
         )
+        // 註冊廣播監聽訊息，報名後重新載入網址，會觸發 refresh
+        NotificationCenter.default.addObserver(
+            forName: .didSubmitEventRegistration,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            Task { @MainActor in
+                self?.webProvider.load(url: "https://ccsys.niu.edu.tw/MvcTeam/Act/ApplyMe")
+            }
+        }
         setupCallbacks()
     }
     
@@ -117,19 +167,17 @@ final class EventRegistration_Tab2_ViewModel: ObservableObject {
                                 Remark: Remark
                             )
                         }
-
                         // 更新畫面
                         DispatchQueue.main.async {
                             self.events = decodedEvents
                         }
                     }
 
-
                 } catch {
-                    print("❌ JSON parse error: \(error.localizedDescription)")
+                    print("JSON parse error: \(error.localizedDescription)")
                 }
             } else {
-                print("⚠️ evaluateJS 無法轉換為字串結果")
+                print("evaluateJS 無法轉換為字串結果")
             }
             self.showPage()
         }
@@ -162,8 +210,126 @@ final class EventRegistration_Tab2_ViewModel: ObservableObject {
         case "https://ccsys.niu.edu.tw/MvcTeam/Act/ApplyMe":
             refresh()
             // isOverlayVisible = false
-        default:
+        default: // 修改報名資訊/取消報名
+            if (!isPostHandled) { // isPostHandled -> true 是在 EventRegistrationTabView 點擊按鈕後改變
+                // 點開編輯報名資訊頁面
+                // 先來抓取資料
+                webProvider.evaluateJS(getInfo) { [weak self] info in
+                    guard let self = self else { return }
+                    // 解析 JS 回傳的 JSON 字串
+                    if let jsonString = info,
+                       let data = jsonString.data(using: .utf8) {
+                        do {
+                            let decoded = try JSONDecoder().decode(EventInfo.self, from: data)
+                            // 顯示 Dialog 部分交給 EventRegistrationTabView
+                            // 這邊只管 帶入頁面資料，改編標誌，把 prog 隱藏掉
+                            DispatchQueue.main.async {
+                                self.selectedEventForModdingInfo = decoded
+                                self.showModdingEventInfoDialog = true
+                            }
+                        } catch {
+                            print("JSON 解析錯誤：\(error)")
+                        }
+                    } else {
+                        print("evaluateJS 沒有回傳預期的字串")
+                    }
+                }
+            }
             break
+        }
+    }
+    
+    func ModdingEventInfo(EventID: String) {
+        isOverlayVisible = true
+        isListVisible = false
+        selectedEventID = EventID
+        webProvider.load(url: "https://ccsys.niu.edu.tw/MvcTeam/Act/RegData/"+EventID)
+    }
+    
+    // 處理 修改／取消 報名
+    func HandlePost(EventID: String, requestVerificationToken: String, signID: String, tel: String, mail: String, remark: String, food: String, proof: String, actions: String) {
+        
+        let postURL = "https://ccsys.niu.edu.tw/MvcTeam/Act/RegData/\(EventID)"
+        // 組合 post 資訊
+        let orderedParams: [(String, String)] = [
+            ("__RequestVerificationToken", requestVerificationToken),
+            ("ApplyId", EventID),
+            ("SignId", signID),
+            ("SignTEL", tel),
+            ("SignEmail", mail),
+            ("SignMemo", remark),
+            ("Food", food),
+            ("Proof", proof),
+            ("action", actions)
+        ]
+        // 改變 toast 內容
+        if actions == "確定取消" {
+            toastMessage = "Event_ModInfo_btn1_success"
+        } else if actions == "儲存修改" {
+            toastMessage = "Event_ModInfo_btn2_success"
+        }
+        // === 重點：使用 JavaScript 直接在 DOM 內組 form 並 submit ===
+        // 由於 apple 有個鳥毛內建安全限制規定，
+        // 當它發現：表單目標（action URL）＝ 當前頁面（self-POST）
+        // policyListener->ignore(WasNavigationIntercepted);
+        // 『 這種 self-POST 很容易被惡意網頁用來強制重新送出相同請求（例如 spam form）』
+        // 所以無法使用 .loadPost 方法
+        let jsFormSubmit = """
+        (function() {
+            try {
+                var form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '\(postURL)';
+                form.target = '_self';
+                    
+                function addInput(name, value) {
+                    var input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = name;
+                    input.value = value;
+                    form.appendChild(input);
+                }
+                    
+                \(orderedParams.map { "addInput('\($0.0)', '\($0.1)');" }.joined(separator: "\n"))
+                
+                document.body.appendChild(form);
+                form.submit();
+                return "submitted";
+            } catch(e) {
+                return "error: " + e.message;
+            }
+        })();
+        """
+        // 執行表單提交（由 JS 端送出，不會被 WebKit 攔截）
+        webProvider.evaluateJS(jsFormSubmit) { [weak self] result in
+            guard let self = self else { return }
+            print("JS form submit result:", result ?? "nil")
+            checkPostStatus()
+        }
+    }
+    
+    private func checkPostStatus() {
+        isPostHandled = false // Post 完成，先把標誌位改回 false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            self.webProvider.evaluateJS("""
+                (function() {
+                    var h1Element = document.querySelector('h1.text-danger.text-shadow');
+                    return h1Element ? h1Element.innerText.includes('報名') : false;
+                })();
+            """) {  [weak self] result in
+                // 這裡一定要用 ! ，否則會有 Optional
+                // 和 Android 不同，這裡true是"1" false是"0"
+                guard let self = self else { return }
+
+                if result! == "1" {
+                    showToast = true
+                    // 報名狀態改變(取消／修改)後發送通知，通知 Tab1 Refresh
+                    NotificationCenter.default.post(name: .didChangeEventRegistration, object: nil)
+                    webProvider.load(url: "https://ccsys.niu.edu.tw/MvcTeam/Act/ApplyMe")
+                } else {
+                    checkPostStatus()
+                }
+            }
         }
     }
     

@@ -26,7 +26,7 @@ final class EventRegistration_Tab1_ViewModel: ObservableObject {
     // --- 全域注射 ---
     private let sso = SSOIDSettings.shared
     // --- JS ---
-    let jsGetData: String = """
+    private let jsGetData: String = """
         (function() { 
             var data = []; 
             var skip = 0; 
@@ -69,6 +69,16 @@ final class EventRegistration_Tab1_ViewModel: ObservableObject {
             initialURL: "https://ccsys.niu.edu.tw/SSO/" + ccsysURL,
             userAgent: .desktop
         )
+        // 註冊廣播監聽訊息，取消報名後重新載入網址，會觸發 refresh
+        NotificationCenter.default.addObserver(
+            forName: .didChangeEventRegistration,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            Task { @MainActor in
+                self?.webProvider.load(url: "https://ccsys.niu.edu.tw/MvcTeam/Act")
+            }
+        }
         setupCallbacks()
     }
     
@@ -185,23 +195,13 @@ final class EventRegistration_Tab1_ViewModel: ObservableObject {
     }
     
     private func handleRegisterEvent(token: String, EventID: String, PostURL: String) {
-        
-        let parameters = [
-            "__RequestVerificationToken": token,
-            "id": EventID,
-            "action": "我要報名"
+        // 組合 post 資訊
+        let orderedParams: [(String, String)] = [
+            ("__RequestVerificationToken", token),
+            ("id", EventID),
+            ("action", "我要報名")
         ]
-                
-        let bodyString = parameters.map { "\($0.key)=\($0.value)" }
-            .joined(separator: "&")
-        guard let postData = bodyString.data(using: .utf8),
-                let url = URL(string: PostURL) else { return }
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = postData
-        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-        
-        webProvider.loadPost(url: PostURL, body: parameters)
+        webProvider.loadPost(url: PostURL, orderedBody: orderedParams)
         checkRegistrationStatus()
     }
     
@@ -220,6 +220,8 @@ final class EventRegistration_Tab1_ViewModel: ObservableObject {
 
                 if result! == "1" {
                     showToast = true
+                    // 報名成功後發送通知，通知 Tab2 Refresh
+                    NotificationCenter.default.post(name: .didSubmitEventRegistration, object: nil)
                     webProvider.load(url: "https://ccsys.niu.edu.tw/MvcTeam/Act")
                 } else {
                     checkRegistrationStatus()

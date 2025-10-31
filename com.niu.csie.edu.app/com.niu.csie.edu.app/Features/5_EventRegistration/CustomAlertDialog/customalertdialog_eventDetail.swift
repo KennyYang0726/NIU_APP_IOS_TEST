@@ -27,7 +27,8 @@ struct customalertdialog_eventDetail: View {
 
         ZStack {
             // 半透明背景
-            Color.black.opacity(0.6).ignoresSafeArea()
+            Color.black.opacity(0.6)
+                .ignoresSafeArea()
 
             VStack(spacing: 0) {
                 // ====== 標題列 ======
@@ -36,6 +37,7 @@ struct customalertdialog_eventDetail: View {
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, isPad ? 14 : 10)
+                    .padding(.horizontal, isPad ? 11 : 7)
                     .background(P.titleBG)
                     .clipShape(RoundedCornerShape(radius: isPad ? 18 : 12, corners: [.topLeft, .topRight]))
 

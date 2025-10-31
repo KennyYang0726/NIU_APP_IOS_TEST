@@ -19,9 +19,9 @@ struct EventRegistration_Tab2_View: View {
                                     vm.selectedEventForDetail = e
                                 },
                                 onModdingInfoTapped: { e in
-                                    vm.isPostHandled = true
-                                    /*
-                                    vm.RegisterEvent(EventID: e.eventSerialID)*/
+                                    // 由於要帶入資料，要等頁面載入完成才能改變標誌
+                                    // vm.showModdingEventInfoDialog = true
+                                    vm.ModdingEventInfo(EventID: e.eventSerialID)
                                 }
                             )
                         }
@@ -30,7 +30,7 @@ struct EventRegistration_Tab2_View: View {
                     .padding(.top, 10)
                 }
                 .toast(isPresented: $vm.showToast) {
-                    Text(LocalizedStringKey("Event_Register_Success"))
+                    Text(vm.toastMessage)
                         .foregroundColor(.white)
                         .padding()
                         .background(Color.black.opacity(0.8))

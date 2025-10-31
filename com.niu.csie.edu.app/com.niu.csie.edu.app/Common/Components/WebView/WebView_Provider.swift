@@ -128,19 +128,20 @@ class WebView_Provider: ObservableObject {
     }
     
     // Post 資訊
-    public func loadPost(url: String, body: [String: String]) {
+    public func loadPost(url: String, orderedBody: [(String, String)]) {
         guard let u = URL(string: url) else { return }
 
-        let bodyString = body.map { "\($0.key)=\($0.value)" }
-            .joined(separator: "&")
-
+        var components = URLComponents()
+        components.queryItems = orderedBody.map { URLQueryItem(name: $0.0, value: $0.1) }
+        let bodyString = components.percentEncodedQuery ?? ""
+        
         var request = URLRequest(url: u)
         request.httpMethod = "POST"
+        request.setValue("application/x-www-form-urlencoded; charset=utf-8", forHTTPHeaderField: "Content-Type")
         request.httpBody = bodyString.data(using: .utf8)
-        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-
         webView.load(request)
     }
+
 
 
     public func loadHTML(_ html: String, baseURL: URL? = nil) {

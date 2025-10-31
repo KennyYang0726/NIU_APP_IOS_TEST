@@ -1,7 +1,7 @@
 import SwiftUI
 
 
-// MARK: - Tab2 專用的資料模型
+// MARK: - Tab2 專用的顯示詳情
 struct EventData_Apply: Identifiable, Codable {
     var id: String { eventSerialID } // 給 ForEach 用
     let name: String
@@ -19,6 +19,21 @@ struct EventData_Apply: Identifiable, Codable {
     let Related_links: String
     let Multi_factor_authentication: String
     let Remark: String
+}
+
+// MARK: - Tab2 專用的修改報名資料
+struct EventInfo: Codable {
+    var RequestVerificationToken: String
+    var SignId: String
+    var role: String
+    var classes: String
+    var schnum: String
+    var name: String
+    var Tel: String
+    var Mail: String
+    var selectedFood: String
+    var selectedProof: String
+    var Remark: String
 }
 
 
@@ -88,14 +103,15 @@ struct EventRegistration_Tab2_ListView: View {
                                     .cornerRadius(31)
                             }
 
-                            if vm.event.event_state == "報名中" {
+                            
+                            if vm.event.event_state.contains("修改") {
                                 Button {
                                     onModdingInfoTapped?(vm.event) // 呼叫父層 callback
                                 } label: {
-                                    Text("Event_BTN_Register")
-                                        .frame(width: isPad ? 159 : 90, height: isPad ? 53 : 37)
+                                    Text("Event_ModInfo")
+                                        .frame(width: isPad ? 259 : 180, height: isPad ? 53 : 37)
                                         .foregroundColor(.white)
-                                        .background(Color(hex: "#297FCA"))
+                                        .background(Color(hex: "#292929"))
                                         .cornerRadius(31)
                                 }
                             }

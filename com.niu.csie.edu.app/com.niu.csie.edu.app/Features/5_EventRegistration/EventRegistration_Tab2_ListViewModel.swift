@@ -16,7 +16,7 @@ final class EventRegistration_Tab2_ListViewModel: ObservableObject, @preconcurre
     // 狀態顏色（業務邏輯）
     var stateColor: Color {
         switch event.event_state {
-        case "報名中":
+        case "修改資料／取消報名":
             return Color(hex: "#297FCA")
         default:
             return Color(hex: "#D32F2F")
@@ -26,7 +26,7 @@ final class EventRegistration_Tab2_ListViewModel: ObservableObject, @preconcurre
     var localizedStateText: LocalizedStringKey {
         switch event.event_state {
         case "修改資料／取消報名": return "Event_State_ok"
-        case "報名截止": return "Event_State_registerOver"
+        case "報名已截止": return "Event_State_registerOver"
         case "活動已結束": return "Event_State_done"
         default: return "Event_State_done"
         }
