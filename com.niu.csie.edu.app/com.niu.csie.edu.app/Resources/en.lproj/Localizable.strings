@@ -40,6 +40,9 @@
   // 主畫面 Drawer
 "HomePage" = "Home";
 "Announcement" = "Announcement";
+"Announcement_show_only_15_result" = "Only show first 15 entries";
+"Announcement_Dialog_Title" = " Hint";
+"Announcement_Dialog_Message" = "The announcement will be opened in your browser.";
 "Calendar" = "Calendar";
 "Questionnaire" = "Questionnaire";
 "Satisfaction_Survey" = "Satisfaction Survey";

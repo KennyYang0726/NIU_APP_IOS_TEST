@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		104F326C2EACB90000C1B28D /* DeviceKit in Frameworks */ = {isa = PBXBuildFile; productRef = 104F326B2EACB90000C1B28D /* DeviceKit */; };
 		1050E1852EA240AF00120A06 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1050E1832EA240AF00120A06 /* InfoPlist.strings */; };
+		105928182EB5DE0B00D5FA03 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 105928172EB5DE0B00D5FA03 /* SwiftSoup */; };
 		10702B2C2E9E010500136301 /* PDFViewer in Frameworks */ = {isa = PBXBuildFile; productRef = 10702B2B2E9E010500136301 /* PDFViewer */; };
 		108474CC2E9A8A2000CEB37C /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 108474CB2E9A8A2000CEB37C /* FirebaseDatabase */; };
 		108474CE2E9A8A3600CEB37C /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 108474CD2E9A8A3600CEB37C /* FirebaseMessaging */; };
@@ -69,6 +70,7 @@
 				10702B2C2E9E010500136301 /* PDFViewer in Frameworks */,
 				108474D02E9A8C7F00CEB37C /* FirebaseAuth in Frameworks */,
 				108474CC2E9A8A2000CEB37C /* FirebaseDatabase in Frameworks */,
+				105928182EB5DE0B00D5FA03 /* SwiftSoup in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -187,6 +189,7 @@
 				108474C92E9A8A0E00CEB37C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				10702B2A2E9E010500136301 /* XCRemoteSwiftPackageReference "PDFViewer" */,
 				104F326A2EACB90000C1B28D /* XCRemoteSwiftPackageReference "DeviceKit" */,
+				105928162EB5DE0B00D5FA03 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 1AA9907A2C8351CD00819A69 /* Products */;
@@ -477,6 +480,14 @@
 				minimumVersion = 5.7.0;
 			};
 		};
+		105928162EB5DE0B00D5FA03 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scinfu/SwiftSoup";
+			requirement = {
+				kind = exactVersion;
+				version = 2.11.1;
+			};
+		};
 		10702B2A2E9E010500136301 /* XCRemoteSwiftPackageReference "PDFViewer" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/rajubd49/PDFViewer.git";
@@ -500,6 +511,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 104F326A2EACB90000C1B28D /* XCRemoteSwiftPackageReference "DeviceKit" */;
 			productName = DeviceKit;
+		};
+		105928172EB5DE0B00D5FA03 /* SwiftSoup */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 105928162EB5DE0B00D5FA03 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
+			productName = SwiftSoup;
 		};
 		10702B2B2E9E010500136301 /* PDFViewer */ = {
 			isa = XCSwiftPackageProductDependency;

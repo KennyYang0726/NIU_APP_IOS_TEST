@@ -40,6 +40,9 @@
   // 主畫面 Drawer
 "HomePage" = "首頁";
 "Announcement" = "公告";
+"Announcement_show_only_15_result" = "僅顯示前１５筆資料";
+"Announcement_Dialog_Title" = " 提示";
+"Announcement_Dialog_Message" = "即將為您跳轉\n至外部瀏覽器\n瀏覽公告內容";
 "Calendar" = "行事曆";
 "Questionnaire" = "問卷";
 "Satisfaction_Survey" = "滿意度調查";

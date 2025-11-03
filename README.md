@@ -56,3 +56,62 @@
 | **學校行事曆** | 查看校內行事曆 |
 | **成就系統** | 蒐集成就圖鑑 |
 | **使用說明** | 使用指南與教學 |
+
+
+<table>
+  <tr>
+    <th colspan="3"> 
+        使用範例
+    </th>
+  </tr>
+  <tr>
+    <td colspan="3">
+      <img src="https://github.com/JamesYang0826/NIU_APP_Assets/releases/download/NIU_APP_Assets/01_ios.gif" width="800">
+    </td>
+  </tr>
+  <tr>
+    <th> 
+        登入頁面
+    </th>
+    <th> 
+        公告系統
+    </th>
+    <th> 
+        行事曆表
+    </th>
+  </tr>
+  <!--
+  <tr>
+    <td colspan="3">
+      <img src="https://github.com/JamesYang0826/NIU_APP_Assets/releases/download/NIU_APP_Assets/02.gif" width="800">    
+    </td>
+  </tr>
+   <tr>
+    <th> 
+        M園區
+    </th>
+    <th> 
+        活動報名
+    </th>
+    <th> 
+        畢業門檻
+    </th>
+  </tr>
+  <tr>
+    <td colspan="3">
+      <img src="https://github.com/JamesYang0826/NIU_APP_Assets/releases/download/NIU_APP_Assets/03.gif" width="800">    
+    </td>
+  </tr>
+   <tr>
+    <th> 
+        公車動態
+    </th>
+    <th> 
+        Zuvio
+    </th>
+    <th> 
+        成就系統
+    </th>
+  </tr>-->
+</table>
+

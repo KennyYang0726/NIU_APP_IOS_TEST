@@ -1,11 +1,12 @@
 //
-//  Firebase、通知註冊
+//  Firebase、通知註冊，位置權限註冊
 //
 import UIKit
 import SwiftUI
 import Firebase
 import FirebaseMessaging
 import UserNotifications
+import CoreLocation
 
 
 
@@ -14,7 +15,9 @@ final class PushDiag {
 }
 
 
-class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
+class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate, CLLocationManagerDelegate {
+
+    private var locationManager: CLLocationManager?
 
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
@@ -27,6 +30,9 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
 
         // 要求授權（授權成功才註冊 APNs，避免時序問題）
         requestNotificationPermission(application: application)
+        
+        // 要求定位授權
+        setupLocationManager()
 
         // 主動抓一次 FCM Token（有時候 delegate 不會立刻回）
         Messaging.messaging().token { token, error in
@@ -62,6 +68,62 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
                 }
             }
         }
+    }
+    
+    // MARK: - 定位設定與授權
+    private func setupLocationManager() {
+        locationManager = CLLocationManager()
+        guard let manager = locationManager else { return }
+
+        manager.delegate = self
+        manager.desiredAccuracy = kCLLocationAccuracyBest
+
+        // iOS 14+ 新寫法（iOS16支援）
+        let status = manager.authorizationStatus
+        handleAuthorizationStatus(status)
+    }
+
+    private func handleAuthorizationStatus(_ status: CLAuthorizationStatus) {
+        switch status {
+        case .notDetermined:
+            PushDiag.log("首次要求位置授權")
+            locationManager?.requestWhenInUseAuthorization()
+
+        case .restricted:
+            PushDiag.log("位置權限受限制（可能是家長控制）")
+
+        case .denied:
+            PushDiag.log("使用者拒絕位置權限，可引導至設定開啟")
+
+        case .authorizedWhenInUse:
+            PushDiag.log("位置權限：使用期間允許")
+            locationManager?.startUpdatingLocation()
+
+        case .authorizedAlways:
+            // 雖然你不用背景定位，但仍可能顯示這個狀態（例如使用者手動開啟）
+            PushDiag.log("位置權限：永遠允許（但僅在前景使用）")
+            locationManager?.startUpdatingLocation()
+
+        @unknown default:
+            PushDiag.log("未知的授權狀態")
+        }
+    }
+
+    // MARK: - CLLocationManagerDelegate
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        let status = manager.authorizationStatus
+        PushDiag.log("位置授權變更：\(status.rawValue)")
+        handleAuthorizationStatus(status)
+    }
+
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let loc = locations.last {
+            PushDiag.log("目前位置：\(loc.coordinate.latitude), \(loc.coordinate.longitude)")
+        }
+    }
+
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        PushDiag.log("定位錯誤：\(error.localizedDescription)")
     }
 
     // MARK: - APNs 註冊結果

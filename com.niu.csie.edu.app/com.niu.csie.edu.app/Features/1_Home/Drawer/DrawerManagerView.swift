@@ -54,7 +54,7 @@ struct DrawerManagerView: View {
     private func currentPageView(_ page: DrawerPageCase) -> some View {
         switch page {
         case .home: HomeView(drawerVM: vm)
-        case .announcements: Drawer_AnnouncementsView(vm: vm)
+        case .announcements: Drawer_AnnouncementsView()
         case .calendar: Drawer_CalendarView()
         case .questionnaire: Drawer_QuestionnaireView()
         case .achievements: Drawer_AchievementsView(vm: vm)
