@@ -33,6 +33,9 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         
         // 要求定位授權
         setupLocationManager()
+        
+        // 新增：啟動時從 Firebase 讀取學期值，更新 AppSettings
+        updateSemesterFromFirebase()
 
         // 主動抓一次 FCM Token（有時候 delegate 不會立刻回）
         Messaging.messaging().token { token, error in
@@ -52,6 +55,18 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
 
         return true
     }
+    
+    private func updateSemesterFromFirebase() {
+        let appSettings = AppSettings()
+        let path = "學年度"
+        FirebaseDatabaseManager.shared.readData(from: path) { value in
+            if let semesterValue = value as? Int {
+                appSettings.semester = semesterValue
+                print("已更新學期為 \(semesterValue)")
+            }
+        }
+    }
+
 
     private func requestNotificationPermission(application: UIApplication) {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
@@ -169,48 +184,3 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         completionHandler(.newData)
     }
 }
-
-
-/*
-class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
-
-    func application(_ application: UIApplication,
-                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
-        FirebaseApp.configure()
-
-        Messaging.messaging().delegate = self
-        UNUserNotificationCenter.current().delegate = self
-
-        requestNotificationPermission(application: application)
-
-        return true
-    }
-
-    private func requestNotificationPermission(application: UIApplication) {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
-            if let error = error {
-                print("通知權限錯誤：\(error)")
-            } else {
-                print("通知權限授權：\(granted)")
-            }
-        }
-
-        application.registerForRemoteNotifications()
-    }
-
-    // MARK: - FCM Token
-    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
-        guard let fcmToken = fcmToken else { return }
-        print("FCM Token: \(fcmToken)")
-    }
-    
-
-    // MARK: - 通知處理
-    func userNotificationCenter(_ center: UNUserNotificationCenter,
-                                willPresent notification: UNNotification,
-                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        completionHandler([.banner, .sound, .badge])
-    }
-}
-*/
-

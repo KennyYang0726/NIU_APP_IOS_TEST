@@ -1,14 +1,17 @@
 import SwiftUI
 import PDFViewer
 
+
+
 struct Drawer_CalendarView: View, DownloadManagerDelegate {
     
     @State private var loadingPDF: Bool = false
     @State private var progressValue: Float = 0.0
     @State private var pdfReady: Bool = false
+    @State private var pdfURL: String = ""
     @ObservedObject var downloadManager = DownloadManager.shared()
+    @ObservedObject var appSettings = AppSettings()  // 用來取 semester
     
-    let pdfURL = "https://academic.niu.edu.tw/var/file/3/1003/img/1202/280557416.pdf"
     
     var body: some View {
         ZStack {
@@ -22,7 +25,7 @@ struct Drawer_CalendarView: View, DownloadManagerDelegate {
                             .padding(.top, 8)
                     }
                 } else if pdfReady {
-                    // ✅ 使用自定義嵌入版
+                    // 使用自定義嵌入版
                     EmbeddedPDFView(pdfURLString: pdfURL)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                         
@@ -34,23 +37,30 @@ struct Drawer_CalendarView: View, DownloadManagerDelegate {
             }
         }
         .onAppear {
-            if fileExistsInDirectory() {
-                self.pdfReady = true
-            } else {
-                self.downloadPDF(pdfUrlString: self.pdfURL)
+            let semester = appSettings.semester
+            let path = "行事曆/\(semester)"
+            print(path)
+            // 從 Firebase 讀取對應的 PDF 連結
+            FirebaseDatabaseManager.shared.readData(from: path) { value in
+                if let urlString = value as? String {
+                    self.pdfURL = urlString
+                    if self.fileExistsInDirectory(urlString: urlString) {
+                        self.pdfReady = true
+                    } else {
+                        self.downloadPDF(pdfUrlString: urlString)
+                    }
+                }
             }
         }
     }
     
     
     // MARK: - File Handling
-    private func fileExistsInDirectory() -> Bool {
-        guard let cachesDirectoryUrl = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first,
-              let lastPathComponent = URL(string: pdfURL)?.lastPathComponent else {
-            return false
-        }
-        let url = cachesDirectoryUrl.appendingPathComponent(lastPathComponent)
-        return FileManager.default.fileExists(atPath: url.path)
+    private func fileExistsInDirectory(urlString: String) -> Bool {
+        let fileManager = FileManager.default
+        let cachesDirectory = fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first!
+        let fileName = URL(string: urlString)?.lastPathComponent ?? "calendar.pdf"
+        return fileManager.fileExists(atPath: cachesDirectory.appendingPathComponent(fileName).path)
     }
     
     private func downloadPDF(pdfUrlString: String) {
