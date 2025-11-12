@@ -66,6 +66,13 @@
 
 "Logout" = "登出";
 
+// EUNI
+"EUNI_Sub_Item1" = "Announcement";
+"EUNI_Sub_Item2" = "Grades";
+"EUNI_Sub_Item3" = "Resources";
+"EUNI_Sub_Item4" = "Homeworks";
+"EUNI_Sub_Item5" = "Enter Course";
+"EUNI_Course_Load_Success_Toast" = "Load Successfully";
 // 成績查詢
 "scoreInquiry_tab_mid_term_results" = "Mid term results";
 "scoreInquiry_tab_final_term_results" = "Final term results";

@@ -51,6 +51,8 @@ struct Drawer_QuestionnaireView: View {
 
 // MARK: - 問卷 WebView 頁面
 struct WebQuestionnairePage: View {
+    private let isPad = UIDevice.current.userInterfaceIdiom == .pad
+    @Environment(\.dismiss) private var dismiss
     @StateObject private var webProvider = WebView_Provider(
         initialURL: "https://forms.gle/vYGJN8sa884ntvWR9",
         userAgent: .mobile
@@ -63,5 +65,22 @@ struct WebQuestionnairePage: View {
         .toolbarBackground(Color.accentColor, for: .navigationBar)
         .navigationBarTitleDisplayMode(.inline)
         .toolbarColorScheme(.dark, for: .navigationBar)
+        // 隱藏預設返回按鈕
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    dismiss()
+                }) {
+                    HStack(spacing: 4) {
+                        Image(systemName: "chevron.left")
+                        if isPad {
+                            Text(LocalizedStringKey("back")) // iPad 顯示文字
+                        }
+                    }
+                }
+                .foregroundColor(.white) // 可依需求調整顏色
+            }
+        }
     }
 }

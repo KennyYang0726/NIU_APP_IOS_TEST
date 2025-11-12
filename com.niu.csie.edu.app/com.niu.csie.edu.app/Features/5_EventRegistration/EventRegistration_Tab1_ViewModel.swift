@@ -7,7 +7,6 @@ import Combine
 final class EventRegistration_Tab1_ViewModel: ObservableObject {
     
     // --- 狀態 ---
-    @Published var isListVisible: Bool = false
     @Published var isOverlayVisible = true
     @Published var overlayText: LocalizedStringKey = "loading"
     
@@ -163,7 +162,6 @@ final class EventRegistration_Tab1_ViewModel: ObservableObject {
             guard let self = self else { return }
             Task { @MainActor in
                 // self.overlayText = LocalizedStringKey("loading")
-                self.isListVisible = false
                 if progress < 1.0 {
                     self.isOverlayVisible = true
                 }
@@ -189,7 +187,6 @@ final class EventRegistration_Tab1_ViewModel: ObservableObject {
     
     func RegisterEvent(EventID: String) {
         isOverlayVisible = true
-        isListVisible = false
         selectedEventID = EventID
         webProvider.load(url: "https://ccsys.niu.edu.tw/MvcTeam/Act/Apply/"+EventID)
     }
@@ -233,7 +230,6 @@ final class EventRegistration_Tab1_ViewModel: ObservableObject {
     
     // --- 顯示畫面（模仿 Android 的 hideProgressOverlay + setVisibility） ---
     private func showPage() {
-        isListVisible = true
         isOverlayVisible = false
         // print("顯示頁面完成")
     }

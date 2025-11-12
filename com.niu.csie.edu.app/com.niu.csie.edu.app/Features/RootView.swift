@@ -16,7 +16,7 @@ struct RootView: View {
                     .environmentObject(appState)
             // 主畫面功能
             case .EUNI:
-                EUNIView()
+                EUNI1View()
                     .environmentObject(appState)
             case .Score_Inquiry:
                 ScoreInquiryTabView()

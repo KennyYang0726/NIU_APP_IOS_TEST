@@ -14,7 +14,7 @@ final class SubjectSystemViewModel: ObservableObject {
     let webProvider: WebView_Provider
     
     // --- SSO 設定 ---
-    let sso = SSOIDSettings.shared
+    private let sso = SSOIDSettings.shared
     
     // --- 用於處理全域狀態導向 ---
     weak var appState: AppState?
