@@ -75,7 +75,6 @@ struct ScoreInquiryTabView: View {
                     }
                     .offset(x: -CGFloat(viewModel.selectedIndex) * width + dragTranslation)
                     .gesture(
-                        
                         DragGesture()
                             .updating($dragTranslation) { value, state, _ in
                                 // 限制拖曳方向，避免出現黑畫面
@@ -102,6 +101,15 @@ struct ScoreInquiryTabView: View {
                     .animation(.easeInOut(duration: 0.25), value: viewModel.selectedIndex)
                 }
             }
+            // 返回手勢攔截
+            .background(
+                NavigationSwipeHijacker(
+                    handleSwipe: {
+                        appState.navigate(to: .home)
+                        return false   // 放行 pop（或你直接 navigate）
+                    }
+                )
+            )
         }
     }
 

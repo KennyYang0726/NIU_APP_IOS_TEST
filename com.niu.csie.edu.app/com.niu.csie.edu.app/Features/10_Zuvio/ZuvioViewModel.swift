@@ -56,8 +56,9 @@ final class ZuvioViewModel: ObservableObject {
             guard let self = self else { return }
             Task { @MainActor in
                 // self.overlayText = LocalizedStringKey("loading")
-                self.webProvider.setVisible(false)
+                // self.webProvider.setVisible(false)
                 if progress < 1.0 {
+                    self.isWebVisible = false
                     self.isOverlayVisible = true
                 }
             }

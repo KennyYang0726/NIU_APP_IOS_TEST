@@ -73,6 +73,8 @@
 "EUNI_Sub_Item4" = "作業";
 "EUNI_Sub_Item5" = "進入課程";
 "EUNI_Course_Load_Success_Toast" = "課程載入成功";
+"EUNI_First_Loading_Tip" = "首次加載公告時間較長\n請耐心等候";
+"ThisCourseDoesNotHaveAny" = "空空如也   ̄_(ツ)_/ ̄";
 // 成績查詢
 "scoreInquiry_tab_mid_term_results" = "期中成績";
 "scoreInquiry_tab_final_term_results" = "期末成績";

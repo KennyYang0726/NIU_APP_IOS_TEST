@@ -5,7 +5,7 @@ import SwiftUI
 struct EUNI1View: View {
     
     @EnvironmentObject var appState: AppState // 注入狀態
-    @ObservedObject var vm = EUNI1ViewModel()
+    @StateObject var vm = EUNI1ViewModel()
     
     public var body: some View {
         AppBar_Framework(title: "EUNI") {
@@ -14,13 +14,13 @@ struct EUNI1View: View {
                     ScrollView {
                         LazyVStack(spacing: 8) {
                             ForEach(vm.courseList) { courseVM in
-                                EUNI1_ListView(vm: courseVM)
+                                EUNI1_ListView(vm: courseVM, parentViewModel: vm)
                             }
                         }
                         .padding(.top, 10)
                     }
                     .toast(isPresented: $vm.showToast) {
-                        Text(LocalizedStringKey("EUNI_Course_Load_Success_Toast"))
+                        Text(vm.toastMessage)
                             .foregroundColor(.white)
                             .padding()
                             .background(Color.black.opacity(0.8))
@@ -59,6 +59,20 @@ struct EUNI1View: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .background(Color("Linear").ignoresSafeArea()) // 全域底色
+            // 返回手勢攔截
+            .background(
+                NavigationSwipeHijacker(
+                    handleSwipe: {
+                        appState.navigate(to: .home)
+                        return false   // 放行 pop（或你直接 navigate）
+                    }
+                )
+            )
+            
+        }
+        .onAppear {
+            // 把 AppState 丟給 ViewModel，之後跳頁都由 VM 處理
+            vm.appState = appState
         }
     }
 }

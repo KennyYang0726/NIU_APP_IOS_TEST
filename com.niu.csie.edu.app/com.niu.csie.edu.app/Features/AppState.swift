@@ -8,6 +8,7 @@ enum AppRoute {
     case home
     // Home 的功能頁
     case EUNI                 // M園區
+    case EUNI2                // M園區-畫面
     case Score_Inquiry        // 成績查詢
     case Class_Schedule       // 我的課表
     case Event_Registration   // 活動報名

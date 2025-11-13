@@ -9,8 +9,9 @@ final class EUNI1ViewModel: ObservableObject {
     @Published var isOverlayVisible = true
     @Published var overlayText: LocalizedStringKey = "loading"
     @Published var isRefreshing = false
-    
-    @Published var showToast = false
+    // 新增 toast 控制
+    @Published var showToast: Bool = false
+    @Published var toastMessage: LocalizedStringKey = ""
     
     @Published var courseList: [EUNI1_ListViewModel] = []
     
@@ -27,6 +28,9 @@ final class EUNI1ViewModel: ObservableObject {
     private let appSettings: AppSettings
     // --- 儲存 EUNI Course Data ---
     private let EUNIcourseData = UserDefaults(suiteName: "EUNIcourseData")!
+    
+    // --- AppState 參考（用於跳頁與帶參數） ---
+    weak var appState: AppState?
     
     // --- JS (這裡先用 __SEMESTER__ 佔位，後續由真實學年度取代) ---
     private let jsGetCourse: String = """
@@ -214,8 +218,83 @@ final class EUNI1ViewModel: ObservableObject {
         isOverlayVisible = false
         // 顯示 toast 控制
         if self.shouldSkipOverlay == false {
+            toastMessage = "EUNI_Course_Load_Success_Toast"
             showToast = true
         }
         // print("顯示頁面完成")
     }
+    
+    // 子項目點擊事件
+    func handleSubItemTap(course: EUNI1_ListViewModel, subItem: String) {
+                
+        let urlDomain = "https://euni.niu.edu.tw/"
+        let courseID = course.id
+        var courseName = course.name
+        
+        var urlString: String = ""
+        var subItemKey: String = ""   // 用來組 title
+        
+        // 第一段：嘗試以 "_" 分割並取第二段
+        if courseName.contains("_") {
+            let parts = courseName.split(separator: "_")
+            if parts.count > 1 {
+                courseName = String(parts[1])
+            }
+        } else {
+            // 備援：使用正規表達式找出「4 位數字後面的字串」
+            let pattern = "\\d{4}(.*)"
+            if let regex = try? NSRegularExpression(pattern: pattern) {
+                let range = NSRange(location: 0, length: courseName.utf16.count)
+                if let match = regex.firstMatch(in: courseName, range: range),
+                   let resultRange = Range(match.range(at: 1), in: courseName) {
+                    courseName = String(courseName[resultRange])
+                }
+            }
+        }
+        // 第二段：遇到 "(" 就取前段
+        if let range = courseName.range(of: "(") {
+            courseName = String(courseName[..<range.lowerBound])
+        }
+        // 最後 .trim()
+        courseName = courseName.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        switch subItem {
+        case "EUNI_Sub_Item1": // 公告
+            // TODO: 之後再補「公告 ID 檢查＋爬取」的流程
+            // 目前先什麼都不做，避免誤導
+            return
+        case "EUNI_Sub_Item2": //
+            // 成績
+            urlString = urlDomain + "grade/report/user/index.php?id=" + courseID
+            subItemKey = "EUNI_Sub_Item2"
+        case "EUNI_Sub_Item3": //
+            // 課程資源
+            urlString = urlDomain + "course/resources.php?id=" + courseID
+            subItemKey = "EUNI_Sub_Item3"
+        case "EUNI_Sub_Item4": //
+            // 作業
+            urlString = urlDomain + "mod/assign/index.php?id=" + courseID
+            subItemKey = "EUNI_Sub_Item4"
+        case "EUNI_Sub_Item5": //
+            // 課程首頁
+            urlString = urlDomain + "course/view.php?id=" + courseID
+            subItemKey = "EUNI_Sub_Item5"
+        default:
+            return
+        }
+        
+        guard let url = URL(string: urlString) else {
+            return
+        }
+        
+        // Title = CourseName + "-" + Choose（照你 Android 的做法）
+        let subTitle = NSLocalizedString(subItemKey, comment: "")
+        let fullTitle = "\(courseName)-\(subTitle)"
+
+        // 將參數寫到 EUNI2 的啟動設定裡
+        EUNI2LaunchConfig.fullTitle = fullTitle
+        EUNI2LaunchConfig.url = url
+        self.appState?.navigate(to: .EUNI2)
+    }
+    
 }

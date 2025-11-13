@@ -193,6 +193,15 @@ struct EventRegistrationTabView: View {
                     .animation(.easeInOut(duration: 0.25), value: viewModel.selectedIndex)
                 }
             }
+            // 返回手勢攔截
+            .background(
+                NavigationSwipeHijacker(
+                    handleSwipe: {
+                        appState.navigate(to: .home)
+                        return false   // 放行 pop（或你直接 navigate）
+                    }
+                )
+            )
             // 活動詳情 Dialog & 修改／取消 報名
             .overlay(alignment: .center) {
                 overlayDialog

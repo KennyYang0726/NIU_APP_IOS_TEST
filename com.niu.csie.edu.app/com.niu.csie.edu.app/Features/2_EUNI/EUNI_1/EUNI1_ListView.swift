@@ -3,7 +3,11 @@ import SwiftUI
 
 
 struct EUNI1_ListView: View {
+    
+    @EnvironmentObject var appState: AppState // 注入狀態
     @ObservedObject var vm: EUNI1_ListViewModel
+    
+    let parentViewModel: EUNI1ViewModel
     
     private let isPad = UIDevice.current.userInterfaceIdiom == .pad
     
@@ -23,9 +27,11 @@ struct EUNI1_ListView: View {
             
             if vm.isExpanded {
                 VStack(spacing: 6) {
+                    // 按順序為 公告 成績 資源 作業 進入課程
                     ForEach(["EUNI_Sub_Item1", "EUNI_Sub_Item2", "EUNI_Sub_Item3", "EUNI_Sub_Item4", "EUNI_Sub_Item5"], id: \.self) { title in
                         Button(action: {
-                            print("\(title) tapped for \(vm.name)")
+                            // print("\(title) tapped for \(vm.name)")
+                            parentViewModel.handleSubItemTap(course: vm, subItem: title)
                         }) {
                             Text(LocalizedStringKey(title))
                                 .font(.system(size: isPad ? 37 : 19, weight: .medium))
@@ -56,6 +62,7 @@ struct EUNI1_ListView: View {
         .padding(.vertical, 6)
 
     }
+
 }
 
 

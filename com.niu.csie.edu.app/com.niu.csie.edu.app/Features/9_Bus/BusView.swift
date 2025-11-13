@@ -19,6 +19,20 @@ struct BusView: View {
                         
                 ProgressOverlay(isVisible: $vm.isOverlayVisible, text: vm.overlayText)
             }
+            // 返回手勢攔截
+            .background(
+                NavigationSwipeHijacker(
+                    handleSwipe: {
+                        if vm.webProvider.webView.canGoBack {
+                            vm.webProvider.goBack()
+                            return true    // 攔截 pop
+                        } else {
+                            appState.navigate(to: .home)
+                            return false   // 放行 pop（或你直接 navigate）
+                        }
+                    }
+                )
+            )
             .onAppear {
                 // 初始化狀態
                 vm.initializeState()
