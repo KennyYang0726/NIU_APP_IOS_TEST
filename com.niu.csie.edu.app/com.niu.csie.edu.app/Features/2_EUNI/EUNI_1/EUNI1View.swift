@@ -13,24 +13,17 @@ struct EUNI1View: View {
                 ZStack {
                     ScrollView {
                         LazyVStack(spacing: 8) {
-                            ForEach(vm.courseList) { courseVM in
-                                EUNI1_ListView(vm: courseVM, parentViewModel: vm)
-                            }
+                            ForEach(Array(vm.courseList.enumerated()), id: \.element.id) { index, courseVM in
+                                    EUNI1_ListView(vm: courseVM, parentViewModel: vm, index: index)
+                                }
                         }
                         .padding(.top, 10)
-                    }
-                    .toast(isPresented: $vm.showToast) {
-                        Text(vm.toastMessage)
-                            .foregroundColor(.white)
-                            .padding()
-                            .background(Color.black.opacity(0.8))
-                            .cornerRadius(12)
                     }
                     // 移出畫面外的 Webview
                     ZStack {
                         WebViewContainer(webView: vm.webProvider.webView)
                             //.frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .frame(maxWidth: 100, maxHeight: 100)
+                            .frame(maxWidth: 500, maxHeight: 500)
                             .offset(x: UIScreen.main.bounds.width * 2)
                     }
                 }
@@ -38,6 +31,14 @@ struct EUNI1View: View {
             // 加載中 prog (注意！放在這裡才是全版面)
             .overlay(
                 ProgressOverlay(isVisible: $vm.isOverlayVisible, text: vm.overlayText)
+                // Toast 放這裡才會在 prog 上方，因為截取公告時會同時出現
+                .toast(isPresented: $vm.showToast) {
+                    Text(vm.toastMessage)
+                        .foregroundColor(.white)
+                        .padding()
+                        .background(Color.black.opacity(0.8))
+                        .cornerRadius(12)
+                }
             )
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {

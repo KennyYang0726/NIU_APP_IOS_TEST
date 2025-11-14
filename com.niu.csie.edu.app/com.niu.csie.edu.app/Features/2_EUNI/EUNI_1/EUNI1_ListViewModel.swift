@@ -8,10 +8,12 @@ final class EUNI1_ListViewModel: ObservableObject, Identifiable {
     
     let name: String
     let id: String
+    let announcementID: String?
     
-    init(name: String, id: String) {
+    init(name: String, id: String, announcementID: String? = nil) {
         self.name = name
         self.id = id
+        self.announcementID = announcementID
     }
     
     func toggleExpanded() {

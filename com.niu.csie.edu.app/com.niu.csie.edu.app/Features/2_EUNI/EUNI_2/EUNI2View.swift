@@ -9,6 +9,8 @@ struct EUNI2View: View {
     
     @StateObject var vm = EUNI2ViewModel()
     
+    private let isPad = UIDevice.current.userInterfaceIdiom == .pad
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -21,7 +23,7 @@ struct EUNI2View: View {
                 if vm.showNone {
                     VStack {
                         Text(LocalizedStringKey("ThisCourseDoesNotHaveAny"))
-                            .font(.title3)
+                            .font(.system(size: isPad ? 43 : 23))
                             .foregroundColor(.primary)
                             .padding()
                     }

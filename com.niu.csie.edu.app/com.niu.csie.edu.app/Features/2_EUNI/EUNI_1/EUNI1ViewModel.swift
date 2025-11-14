@@ -18,6 +18,10 @@ final class EUNI1ViewModel: ObservableObject {
     // --- 控制旗標 ---
     private var shouldSkipOverlay = false     // 控制是否顯示 overlay
     private var isManualReload = false        // 用於 refresh 按鈕
+    private var isGettingAnnouncement = false // 判定正在取得公告與否，決定顯示 prog
+    
+    private var selectIndex: Int = 0    // 儲存所選的 index，用於公告截取傳入 func
+    private var selectName: String = "" // 儲存所選的課名(簡化)，用於公告截取傳入 func
     
     // --- WebView 管理 ---
     let webProvider: WebView_Provider
@@ -33,7 +37,7 @@ final class EUNI1ViewModel: ObservableObject {
     weak var appState: AppState?
     
     // --- JS (這裡先用 __SEMESTER__ 佔位，後續由真實學年度取代) ---
-    private let jsGetCourse: String = """
+    private let jsGetCourse = """
         (function() {
             var elements = document.querySelectorAll('i.fa.fa-graduation-cap');
             var result = [];
@@ -52,7 +56,21 @@ final class EUNI1ViewModel: ObservableObject {
             });
             return JSON.stringify(result);
         })();
-        """
+    """
+    
+    private let jsGetAnnouncementID = """
+        (function() {
+            var links = document.querySelectorAll('.activityinstance a');
+            var pattern = /https:\\/\\/euni\\.niu\\.edu\\.tw\\/mod\\/forum\\/view\\.php\\?id=\\d+/;
+            for (var i = 0; i < links.length; i++) {
+                if (pattern.test(links[i].href)) {
+                    return links[i].href; // 回傳第一個符合的 href
+                }
+            }
+            return null;
+        })();
+    """
+
     
     init() {
         // 初始化 AppSettings
@@ -65,7 +83,7 @@ final class EUNI1ViewModel: ObservableObject {
         )
         setupCallbacks()
         // 自動載入資料判斷，不顯示 overlay
-        if EUNIcourseData.object(forKey: "課程_0_名稱") != nil {
+        if EUNIcourseData.string(forKey: "課程_0_名稱") != nil {
             shouldSkipOverlay = true
             loadCoursesFromUserDefaults()
         }
@@ -84,8 +102,8 @@ final class EUNI1ViewModel: ObservableObject {
             guard let self = self else { return }
             Task { @MainActor in
                 // self.overlayText = LocalizedStringKey("loading")
-                // 僅在非快取載入時顯示 overlay
-                if !self.shouldSkipOverlay {
+                // 僅在非快取載入時，或是進入課程頁面準備爬取公告ID時，顯示 overlay
+                if !self.shouldSkipOverlay || self.isGettingAnnouncement {
                     if progress < 1.0 {
                         self.isOverlayVisible = true
                     }
@@ -97,7 +115,7 @@ final class EUNI1ViewModel: ObservableObject {
     // --- 頁面載入完成時的處理邏輯 ---
     private func handlePageFinished(url: String?) {
         // print("頁面載入完成: \(url ?? "未知網址")")
-        let dontHasCourseData = EUNIcourseData.object(forKey: "課程_0_名稱") == nil
+        let dontHasCourseData = EUNIcourseData.string(forKey: "課程_0_名稱") == nil
         // 若手動 reload，強制重新抓資料
         if isManualReload {
             isManualReload = false
@@ -108,6 +126,12 @@ final class EUNI1ViewModel: ObservableObject {
         if dontHasCourseData {
             fetchCourseData()
         }
+        // 若網址包含 "course/view.php?id=" ，代表要來爬取公告ID
+        if (url!.contains("course/view.php?id=")) {
+            isGettingAnnouncement = false
+            fetchAnnouncementID(courseIndex: selectIndex, courseName: selectName)
+        }
+        
     }
     
     // --- 從外部觸發的手動重新載入 ---
@@ -225,8 +249,8 @@ final class EUNI1ViewModel: ObservableObject {
     }
     
     // 子項目點擊事件
-    func handleSubItemTap(course: EUNI1_ListViewModel, subItem: String) {
-                
+    func handleSubItemTap(course: EUNI1_ListViewModel, subItem: String, index: Int) {
+                        
         let urlDomain = "https://euni.niu.edu.tw/"
         let courseID = course.id
         var courseName = course.name
@@ -257,12 +281,22 @@ final class EUNI1ViewModel: ObservableObject {
         }
         // 最後 .trim()
         courseName = courseName.trimmingCharacters(in: .whitespacesAndNewlines)
+        selectName = courseName
         
         switch subItem {
         case "EUNI_Sub_Item1": // 公告
-            // TODO: 之後再補「公告 ID 檢查＋爬取」的流程
-            // 目前先什麼都不做，避免誤導
-            return
+            // 公告 ID 「檢查＋爬取」流程
+            if let announcementID = EUNIcourseData.string(forKey: "課程_\(index)_公告ID") {
+                urlString = urlDomain + "mod/forum/view.php?id=" + announcementID
+                subItemKey = "EUNI_Sub_Item1"
+            } else {
+                // 第一次需要爬取公告 ID
+                isGettingAnnouncement = true // 改變狀態
+                toastMessage = "EUNI_First_Loading_Tip"
+                showToast = true
+                selectIndex = index
+                webProvider.load(url: urlDomain + "course/view.php?id=" + courseID)
+            }
         case "EUNI_Sub_Item2": //
             // 成績
             urlString = urlDomain + "grade/report/user/index.php?id=" + courseID
@@ -275,6 +309,7 @@ final class EUNI1ViewModel: ObservableObject {
             // 作業
             urlString = urlDomain + "mod/assign/index.php?id=" + courseID
             subItemKey = "EUNI_Sub_Item4"
+            print(urlString)
         case "EUNI_Sub_Item5": //
             // 課程首頁
             urlString = urlDomain + "course/view.php?id=" + courseID
@@ -296,5 +331,36 @@ final class EUNI1ViewModel: ObservableObject {
         EUNI2LaunchConfig.url = url
         self.appState?.navigate(to: .EUNI2)
     }
+    
+    
+    private func fetchAnnouncementID(
+        courseIndex: Int,
+        courseName: String
+        // completion: @escaping (String?) -> Void
+    ) {
+        webProvider.evaluateJS(jsGetAnnouncementID) { [weak self] result in
+            guard let self = self else { return }
+            guard let value = result, !value.isEmpty else {
+                toastMessage = "EUNI_Load_Announcement_Failed"
+                showToast = true
+                return
+            }
+            // 解析 id
+            if let idPart = value.split(separator: "=").last {
+                let announcementID = String(idPart)
+                // 存進 UserDefaults
+                EUNIcourseData.set(announcementID, forKey: "課程_\(courseIndex)_公告ID")
+                // 將參數寫到 EUNI2 的啟動設定裡，截取完成，存入完成，直接跳轉
+                let subTitle = NSLocalizedString("EUNI_Sub_Item1", comment: "")
+                EUNI2LaunchConfig.fullTitle = "\(selectName)-\(subTitle)"
+                EUNI2LaunchConfig.url = URL(string: value)!
+                self.appState?.navigate(to: .EUNI2)
+            } else {
+                toastMessage = "EUNI_Load_Announcement_Failed"
+                showToast = true
+            }
+        }
+    }
+
     
 }

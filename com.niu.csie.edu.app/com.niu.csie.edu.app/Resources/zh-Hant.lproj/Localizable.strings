@@ -74,6 +74,7 @@
 "EUNI_Sub_Item5" = "進入課程";
 "EUNI_Course_Load_Success_Toast" = "課程載入成功";
 "EUNI_First_Loading_Tip" = "首次加載公告時間較長\n請耐心等候";
+"EUNI_Load_Announcement_Failed" = "無法進入該公告\n請稍後再試一次";
 "ThisCourseDoesNotHaveAny" = "空空如也   ̄_(ツ)_/ ̄";
 // 成績查詢
 "scoreInquiry_tab_mid_term_results" = "期中成績";

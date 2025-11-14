@@ -8,6 +8,7 @@ struct EUNI1_ListView: View {
     @ObservedObject var vm: EUNI1_ListViewModel
     
     let parentViewModel: EUNI1ViewModel
+    let index: Int   // 這個課程在 courseList 裡的 index
     
     private let isPad = UIDevice.current.userInterfaceIdiom == .pad
     
@@ -31,7 +32,7 @@ struct EUNI1_ListView: View {
                     ForEach(["EUNI_Sub_Item1", "EUNI_Sub_Item2", "EUNI_Sub_Item3", "EUNI_Sub_Item4", "EUNI_Sub_Item5"], id: \.self) { title in
                         Button(action: {
                             // print("\(title) tapped for \(vm.name)")
-                            parentViewModel.handleSubItemTap(course: vm, subItem: title)
+                            parentViewModel.handleSubItemTap(course: vm, subItem: title, index: index)
                         }) {
                             Text(LocalizedStringKey(title))
                                 .font(.system(size: isPad ? 37 : 19, weight: .medium))

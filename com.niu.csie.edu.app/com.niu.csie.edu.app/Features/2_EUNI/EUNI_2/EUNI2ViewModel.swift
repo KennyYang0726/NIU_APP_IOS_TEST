@@ -26,7 +26,8 @@ final class EUNI2ViewModel: ObservableObject {
     document.getElementById('above-header').style.display = 'none';
     document.getElementById('block-region-side-post').style.display = 'none';
     document.getElementById('showsidebaricon').style.display = 'none';
-    document.getElementById('page-footer').style.display = 'none';
+    // document.getElementById('page-footer').style.display = 'none';
+    document.getElementById('page-footer').style.setProperty('display', 'none', 'important');
     var jumpnav = document.querySelector('.jumpnav');
     if (jumpnav) {
         jumpnav.style.display = 'none';
@@ -35,6 +36,9 @@ final class EUNI2ViewModel: ObservableObject {
     if (activity_footer) {
         activity_footer.style.display = 'none';
     }
+    // ipad 會是電腦版樣式(判定是因為螢幕寬度不是 UserAgent)
+    document.getElementById('adaptable-page-header-wrapper').style.display = 'none';
+    document.getElementById('page-second-header').style.setProperty('display', 'none', 'important');
     """
     
     // --- JS：暗黑模式樣式 ---
@@ -106,14 +110,15 @@ final class EUNI2ViewModel: ObservableObject {
         let js = """
                 (function() {
                     var bodyText = document.body.innerText;
-                    return bodyText.includes('此課程沒有') || bodyText.includes('目前還沒有');
+                    var introExists = document.getElementById('intro') !== null;
+                    return bodyText.includes('此課程沒有') || (bodyText.includes('目前還沒有') && bodyText.includes('一般消息與公告')) || (bodyText.includes('目前還沒有') && !introExists);
                 })();
                 """
         webProvider.evaluateJS(js) { [weak self] result in
             guard let self = self else { return }
             Task { @MainActor in
                 let raw = result ?? "0"
-                // JS 回傳會是 "true" 或 "false"
+                // JS 回傳會是 "1" 或 "0"
                 if raw.contains("1") {
                     self.showNone = true
                     self.isWebVisible = false
