@@ -121,7 +121,7 @@ public struct SSOLoginWebView: UIViewRepresentable {
                     if let name = result as? String {
                         // 儲存到 UserDefaults (iOS 相當於 Android 的 SharedPreferences)
                         self.settings.name = name
-                        // print("✅ Name: \(name)")
+                        // print("Name: \(name)")
                     }
                     self.parent.onResult(.success)
                     return

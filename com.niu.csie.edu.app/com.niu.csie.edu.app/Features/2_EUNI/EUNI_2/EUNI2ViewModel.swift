@@ -36,7 +36,7 @@ final class EUNI2ViewModel: ObservableObject {
     if (activity_footer) {
         activity_footer.style.display = 'none';
     }
-    // ipad 會是電腦版樣式(判定是因為螢幕寬度不是 UserAgent)
+    // ipad 會是電腦版樣式(判定是因為螢幕寬度 不是UserAgent)
     document.getElementById('adaptable-page-header-wrapper').style.display = 'none';
     document.getElementById('page-second-header').style.setProperty('display', 'none', 'important');
     """
@@ -91,6 +91,18 @@ final class EUNI2ViewModel: ObservableObject {
     // --- 頁面載入完成時的處理邏輯 ---
     private func handlePageFinished(url: String?) {
         // print("頁面載入完成: \(url ?? "未知網址")")
+        // 若連結類非自家euni，自動跳轉外部應用
+        // 無需像 Android 指定需要開啟的應用包名，系統會自己判定
+        // 若無可以開啟的對應應用，fallback為預設瀏覽器
+        guard
+            let urlString = url?.trimmingCharacters(in: .whitespacesAndNewlines),
+                let link = URL(string: urlString)
+        else { return }
+        if !urlString.contains("euni.niu.edu.tw") {
+            UIApplication.shared.open(link)
+            webProvider.goBack()
+        }
+        
         webProvider.evaluateJS(jsHideElements) { [weak self] _ in
             guard let self = self else { return }
             // 2. 如果是 Dark Mode，執行反白樣式

@@ -154,6 +154,14 @@ final class LoginViewModel: ObservableObject {
 
     private func checkLoginResult() {
         // 當兩邊都完成才收斂
+        
+        print("--------")
+        print("startZuvioLoginProcess:\(startZuvioLoginProcess)")
+        print("zuvioLoginSuccess:\(zuvioLoginSuccess)")
+        print("startSSOLoginProcess:\(startSSOLoginProcess)")
+        print("ssoLoginSuccess:\(ssoLoginSuccess)")
+        print("--------")
+        
         guard !startZuvioLoginProcess, !startSSOLoginProcess else { return }
 
         showOverlay = false
